@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signage Display</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      width: 1080px;
+      height: 1920px;
+      background-color: #e6f0fa;
+      color: #ffffff;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bg-holder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1080px;
+      height: 1920px;
+      z-index: 1;
+    }
+
+    .overlay-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 60px;
+      box-sizing: border-box;
+    }
+
+    .cards-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Motion Canvas Component -->
+  <div class="bg-holder">
+    <ambient-circles></ambient-circles>
+  </div>
+
+  <!-- Foreground Content Layer -->
+  <div class="overlay-content">
+    <div id="cards-container" class="cards-wrapper">
+      <!-- Dynamic content from content.json loads here -->
+    </div>
+  </div>
+
+  <script src="engine.js"></script>
+</body>
+</html>
