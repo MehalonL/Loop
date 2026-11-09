@@ -28,17 +28,21 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
         }
 
+        /* Fixed 1080x1920 HD Canvas scaled responsively to fit viewport */
         .poster-container {
             width: 1080px;
             height: 1920px;
-            position: relative;
+            position: absolute;
             background-color: #dbe4f0;
             overflow: hidden;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform-origin: center center;
+            will-change: transform;
         }
 
         .bg-holder {
@@ -67,13 +71,13 @@
 
         /* Session card styling with semi-transparent background */
         .session-card {
-            background-color: rgba(240, 245, 255, 0.72);
+            background-color: rgba(240, 245, 255, 0.75);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.7);
             border-radius: 20px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
         }
 
         .session-card-bg {
@@ -122,6 +126,18 @@
     </div>
 
     <script>
+        // Responsive auto-scaling to fit any screen size perfectly
+        function handleResize() {
+            const container = document.querySelector('.poster-container');
+            if (!container) return;
+            const scaleX = window.innerWidth / 1080;
+            const scaleY = window.innerHeight / 1920;
+            const scale = Math.min(scaleX, scaleY);
+            container.style.transform = `scale(${scale})`;
+        }
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('DOMContentLoaded', handleResize);
+
         // Embedded Data Payload
         const signageData = {
           "display": {
@@ -155,9 +171,9 @@
                 "id": "s3",
                 "date": "Thursday, 12 Nov",
                 "lang": "FR",
-                "time": "6:00 PM - 7:30 PM",
+                "time": "2:00 PM - 3:30 PM",
                 "location": "Addis Ababa Time (EAT)",
-                "qrCode": "Docs/Thursday, November 12, 6-00 PM.png"
+                "qrCode": "Docs/Thursday, November 12, 2-00 PM.png"
               },
               {
                 "id": "s4",
@@ -172,7 +188,7 @@
           }
         };
 
-        // Ambient Circles Web Component with even grid-cell dispersal
+        // Ambient Circles Web Component
         class AmbientCircles extends HTMLElement {
           constructor() {
             super();
@@ -211,26 +227,24 @@
             this.speedMultiplier = config.animationSpeed || 1.0;
 
             const baseColors = isCard 
-              ? [{ r: 120, g: 155, b: 220 }, { r: 160, g: 190, b: 240 }]
-              : [{ r: 26, g: 59, b: 139 }, { r: 64, g: 102, b: 184 }];
+              ? [{ r: 180, g: 205, b: 245 }, { r: 210, g: 228, b: 255 }]
+              : [{ r: 160, g: 190, b: 240 }, { r: 190, g: 215, b: 250 }];
 
-            const count = config.circleCount || (isCard ? 18 : 48);
+            const count = config.circleCount || (isCard ? 54 : 48);
             this.circles = [];
 
-            // Calculate a grid layout to guarantee even spatial dispersion across the canvas height & width
-            const cols = isCard ? 6 : 6;
+            const cols = isCard ? 9 : 6;
             const rows = Math.ceil(count / cols);
             const cellW = customWidth / cols;
             const cellH = customHeight / rows;
 
             for (let i = 0; i < count; i++) {
               const selectedColor = baseColors[i % baseColors.length];
-              const alpha = isCard ? (0.05 + Math.random() * 0.12).toFixed(2) : (0.08 + Math.random() * 0.22).toFixed(2);
+              const alpha = isCard ? (0.03 + Math.random() * 0.06).toFixed(2) : (0.06 + Math.random() * 0.12).toFixed(2);
               
-              const minR = isCard ? 25 : (customWidth / 8);
-              const maxR = isCard ? 80 : (customWidth / 4);
+              const minR = isCard ? 20 : (customWidth / 8);
+              const maxR = isCard ? 65 : (customWidth / 4);
 
-              // Grid-cell positioning with randomized jitter inside each cell
               const row = Math.floor(i / cols);
               const col = i % cols;
               const posX = (col * cellW) + (Math.random() * cellW);
@@ -263,7 +277,6 @@
               c.x += c.vx;
               c.y += c.vy;
 
-              // Soft bounce off padded boundaries to maintain uniform coverage
               if (c.x < -100 || c.x > w + 100) c.vx *= -1;
               if (c.y < -100 || c.y > h + 100) c.vy *= -1;
 
@@ -391,7 +404,7 @@
                   const cardWidth = card.offsetWidth || 980;
                   const cardHeight = card.offsetHeight || 220;
                   cardAmbient.init({
-                    circleCount: 18,
+                    circleCount: 54,
                     animationSpeed: 0.6
                   }, cardWidth, cardHeight, true);
                 }
@@ -401,6 +414,7 @@
         }
 
         renderSignage();
+        handleResize();
     </script>
 </body>
 </html>
