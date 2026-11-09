@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Slow global screen shift animation for OLED burn-in protection */
+        /* 5x faster global screen shift animation for OLED burn-in protection (12s instead of 60s) */
         @keyframes screenShift {
             0% { transform: translate(0px, 0px); }
             25% { transform: translate(4px, -4px); }
@@ -59,7 +59,7 @@
             z-index: 2;
             width: 100%;
             height: 100%;
-            animation: screenShift 60s ease-in-out infinite;
+            animation: screenShift 12s ease-in-out infinite;
         }
 
         .brand-navy {
@@ -69,7 +69,7 @@
             background-color: #1a3b8b;
         }
 
-        /* Session card styling with semi-transparent background */
+        /* Session card styling with optimized compact height and semi-transparent background */
         .session-card {
             background-color: rgba(240, 245, 255, 0.75);
             backdrop-filter: blur(8px);
@@ -78,6 +78,8 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
         }
 
         .session-card-bg {
@@ -119,7 +121,7 @@
         </div>
 
         <!-- App UI Layer -->
-        <div id="poster-app" class="poster-content flex flex-col justify-between p-16">
+        <div id="poster-app" class="poster-content flex flex-col justify-between px-16 pt-12 pb-10">
             <!-- Populated via script -->
         </div>
 
@@ -144,7 +146,7 @@
             "backgroundColor": "#dbe4f0",
             "logoUrl": "Docs/IOM75logo.png",
             "circleCount": 48,
-            "animationSpeed": 1.0
+            "animationSpeed": 5.0 // 5x faster circle drift
           },
           "announcement": {
             "badge": "CAREER DEVELOPMENT CLINIC",
@@ -212,7 +214,7 @@
             this.canvas = this.shadowRoot.getElementById('circleCanvas');
             this.ctx = this.canvas.getContext('2d');
             this.circles = [];
-            this.speedMultiplier = 1.0;
+            this.speedMultiplier = 5.0;
           }
 
           init(config, customWidth = 1080, customHeight = 1920, isCard = false) {
@@ -224,7 +226,7 @@
             } else {
               this.style.setProperty('--bg-color', 'transparent');
             }
-            this.speedMultiplier = config.animationSpeed || 1.0;
+            this.speedMultiplier = config.animationSpeed || 5.0;
 
             const baseColors = isCard 
               ? [{ r: 180, g: 205, b: 245 }, { r: 210, g: 228, b: 255 }]
@@ -259,7 +261,7 @@
                 vx: (Math.random() - 0.5) * this.speedMultiplier,
                 vy: (Math.random() - 0.5) * this.speedMultiplier,
                 scaleAngle: Math.random() * Math.PI * 2,
-                scaleSpeed: 0.002 + Math.random() * 0.006
+                scaleSpeed: 0.01 + Math.random() * 0.02 // 5x faster pulsing
               });
             }
 
@@ -294,13 +296,13 @@
         }
         customElements.define('ambient-circles', AmbientCircles);
 
-        // Render Poster Content
+        // Render Poster Content with optimized vertical spacing
         function renderSignage() {
           const data = signageData;
           
           const mainBg = document.getElementById('main-ambient');
           if (mainBg && data.display) {
-            mainBg.init({ ...data.display, animationSpeed: 0.8 }, 1080, 1920, false);
+            mainBg.init({ ...data.display, animationSpeed: 5.0 }, 1080, 1920, false);
           }
 
           const appContainer = document.getElementById('poster-app');
@@ -313,39 +315,39 @@
                 : `<span class="text-slate-800 font-normal text-2xl">QR code Here</span>`;
 
               return `
-                <div class="session-card p-9 pl-14 flex justify-between items-center" id="session-card-${index}">
+                <div class="session-card pl-12 pr-8 py-6 flex justify-between items-center" id="session-card-${index}">
                     <div class="session-card-bg">
                         <ambient-circles class="card-ambient"></ambient-circles>
                     </div>
                     <div class="session-card-content flex flex-col justify-center">
-                        <div class="flex items-center space-x-6 mb-6">
-                            <h3 class="text-5xl font-extrabold text-slate-900 tracking-tight">
+                        <div class="flex items-center space-x-6 mb-3">
+                            <h3 class="text-4xl font-extrabold text-slate-900 tracking-tight">
                                 ${s.date}
                             </h3>
-                            <span class="bg-brand-navy text-amber-400 font-extrabold text-2xl px-5 py-2 rounded-xl tracking-wide shadow-sm">
+                            <span class="bg-brand-navy text-amber-400 font-extrabold text-xl px-4 py-1.5 rounded-xl tracking-wide shadow-sm">
                                 ${s.lang}
                             </span>
                         </div>
-                        <p class="text-3xl text-slate-800 font-semibold mb-2">
+                        <p class="text-2xl text-slate-800 font-semibold mb-1">
                             ${s.time}
                         </p>
-                        <p class="text-3xl text-slate-700 font-medium">
+                        <p class="text-2xl text-slate-700 font-medium">
                             ${s.location}
                         </p>
                     </div>
 
-                    <div class="session-card-content flex flex-col items-center space-y-3">
-                        <div class="w-48 h-48 bg-white/95 rounded-2xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
+                    <div class="session-card-content flex flex-col items-center space-y-2">
+                        <div class="w-36 h-36 bg-white/95 rounded-2xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
                             ${qrContent}
                         </div>
-                        <span class="text-slate-700 text-2xl font-normal">Registration link</span>
+                        <span class="text-slate-700 text-xl font-normal">Registration link</span>
                     </div>
                 </div>
               `;
             }).join('');
 
             const logoSectionHTML = data.display.logoUrl 
-              ? `<img src="${encodeURI(data.display.logoUrl)}" class="h-20 w-auto object-contain pr-4" alt="IOM 75 Logo">`
+              ? `<img src="${encodeURI(data.display.logoUrl)}" class="h-16 w-auto object-contain pr-2" alt="IOM 75 Logo">`
               : `<div class="flex items-center space-x-6 pr-4">
                   <div class="flex items-center space-x-3">
                       <div class="w-14 h-14 border-2 border-brand-navy rounded-full flex items-center justify-center p-1">
@@ -367,31 +369,31 @@
 
             appContainer.innerHTML = `
               <div class="w-full flex flex-col">
-                  <div class="w-full flex items-center justify-between mb-20">
-                      <div class="bg-brand-navy px-10 py-5 w-[650px] shadow-sm">
-                          <h1 class="text-white text-3xl font-bold tracking-wider uppercase font-sans">
+                  <div class="w-full flex items-center justify-between mb-10">
+                      <div class="bg-brand-navy px-8 py-4 w-[600px] shadow-sm">
+                          <h1 class="text-white text-2xl font-bold tracking-wider uppercase font-sans">
                               ${item.badge}
                           </h1>
                       </div>
                       ${logoSectionHTML}
                   </div>
 
-                  <div class="px-6 mb-12">
-                      <h2 class="text-5xl font-semibold brand-navy tracking-tight mb-3">
+                  <div class="px-4 mb-8">
+                      <h2 class="text-4xl font-semibold brand-navy tracking-tight mb-2">
                           ${item.titleLine1}
                       </h2>
-                      <h1 class="text-6xl font-black brand-navy tracking-tight">
+                      <h1 class="text-5xl font-black brand-navy tracking-tight">
                           ${item.titleLine2}
                       </h1>
                   </div>
 
-                  <div class="flex flex-col space-y-9 px-2">
+                  <div class="flex flex-col space-y-6 px-2">
                       ${sessionsHTML}
                   </div>
               </div>
 
-              <div class="px-6 pb-8 pt-4">
-                  <p class="text-4xl font-normal brand-navy leading-tight max-w-[800px]">
+              <div class="px-4 pt-2">
+                  <p class="text-3xl font-normal brand-navy leading-tight max-w-[850px]">
                       ${item.footer}
                   </p>
               </div>
@@ -402,10 +404,10 @@
                 const cardAmbient = card.querySelector('.card-ambient');
                 if (cardAmbient) {
                   const cardWidth = card.offsetWidth || 980;
-                  const cardHeight = card.offsetHeight || 220;
+                  const cardHeight = card.offsetHeight || 180;
                   cardAmbient.init({
                     circleCount: 54,
-                    animationSpeed: 0.6
+                    animationSpeed: 5.0
                   }, cardWidth, cardHeight, true);
                 }
               });
