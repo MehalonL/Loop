@@ -1,3 +1,4 @@
+// 1. DYNAMIC BACKGROUND MOTION ENGINE
 class AmbientCircles extends HTMLElement {
   constructor() {
     super();
@@ -8,7 +9,7 @@ class AmbientCircles extends HTMLElement {
           display: block;
           width: 100%;
           height: 100%;
-          background-color: #e6f0fa; /* Light blue background */
+          background-color: var(--bg-color, #e6f0fa);
         }
         canvas {
           width: 1080px;
@@ -21,16 +22,24 @@ class AmbientCircles extends HTMLElement {
     this.canvas = this.shadowRoot.getElementById('circleCanvas');
     this.ctx = this.canvas.getContext('2d');
     this.circles = [];
-    this.numCircles = 20;
+    this.speedMultiplier = 2.5;
   }
 
-  connectedCallback() {
+  init(config) {
+    if (config.backgroundColor) {
+      this.style.setProperty('--bg-color', config.backgroundColor);
+    }
+    this.speedMultiplier = config.animationSpeed || 2.5;
+
     const baseColors = [
       { r: 0, g: 51, b: 160 },   // #0033a0
       { r: 64, g: 102, b: 184 }  // #4066b8
     ];
 
-    for (let i = 0; i < this.numCircles; i++) {
+    const count = config.circleCount || 20;
+    this.circles = [];
+
+    for (let i = 0; i < count; i++) {
       const selectedColor = baseColors[i % baseColors.length];
       const alpha = (0.08 + Math.random() * 0.22).toFixed(2);
 
@@ -40,8 +49,8 @@ class AmbientCircles extends HTMLElement {
         baseRadius: 120 + Math.random() * 330,
         radius: 0,
         color: `rgba(${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b}, ${alpha})`,
-        vx: (Math.random() - 0.5) * 2.5,
-        vy: (Math.random() - 0.5) * 2.5,
+        vx: (Math.random() - 0.5) * this.speedMultiplier,
+        vy: (Math.random() - 0.5) * this.speedMultiplier,
         scaleAngle: Math.random() * Math.PI * 2,
         scaleSpeed: 0.005 + Math.random() * 0.015
       });
@@ -73,5 +82,57 @@ class AmbientCircles extends HTMLElement {
     requestAnimationFrame(() => this.animate());
   }
 }
-
 customElements.define('ambient-circles', AmbientCircles);
+
+// 2. DATA LOADER & RENDERER
+async function loadSignageData() {
+  try {
+    const response = await fetch('content.json');
+    const data = await response.json();
+
+    // Set frame color dynamically
+    if (data.display && data.display.frameColor) {
+      document.body.style.borderColor = data.display.frameColor;
+    }
+
+    // Initialize/Update background engine config
+    const bgComponent = document.querySelector('ambient-circles');
+    if (bgComponent && data.display) {
+      bgComponent.init(data.display);
+    }
+
+    // Render Announcement Display
+    const container = document.getElementById('cards-container');
+    const item = data.announcement;
+
+    if (item) {
+      let sessionsHTML = item.sessions.map(s => `
+        <div class="session-row">
+          <div class="session-date">${s.date} <span class="lang-tag">${s.lang}</span></div>
+          <div class="session-times">
+            <span><b>Geneva:</b> ${s.timeGeneva}</span>
+            <span><b>NY:</b> ${s.timeNY}</span>
+            <span><b>Bangkok:</b> ${s.timeBangkok}</span>
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = `
+        <div class="main-card">
+          <div class="badge">${item.badge}</div>
+          <h2 class="card-title">${item.title}</h2>
+          <p class="card-desc">${item.description}</p>
+          <div class="sessions-grid">
+            ${sessionsHTML}
+          </div>
+          <div class="card-footer">${item.footer}</div>
+        </div>
+      `;
+    }
+  } catch (err) {
+    console.error('Waiting for content.json...', err);
+  }
+}
+
+loadSignageData();
+setInterval(loadSignageData, 120000);
