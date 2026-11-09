@@ -1,3 +1,44 @@
 {
-  "buffer": true
+  "display": {
+    "backgroundColor": "#e6f0fa",
+    "frameColor": "#ffcc00",
+    "circleCount": 20,
+    "animationSpeed": 2.5
+  },
+  "announcement": {
+    "badge": "CAREER DEVELOPMENT CLINIC",
+    "title": "Boost Your Applications: CVs & Motivation Letters",
+    "description": "A friendly reminder that the next Career Lab session will be held tomorrow and Thursday. Take advantage of this opportunity to learn more about applications, interviews, assessments, and career growth within IOM.",
+    "sessions": [
+      {
+        "date": "Tuesday, 10 Nov",
+        "lang": "EN",
+        "timeGeneva": "09:00 – 10:30 CET",
+        "timeNY": "03:00 – 04:30 EST",
+        "timeBangkok": "15:00 – 16:30 ICT"
+      },
+      {
+        "date": "Tuesday, 10 Nov",
+        "lang": "EN",
+        "timeGeneva": "16:00 – 17:30 CET",
+        "timeNY": "10:00 – 11:30 EST",
+        "timeBangkok": "22:00 – 23:30 ICT"
+      },
+      {
+        "date": "Thursday, 12 Nov",
+        "lang": "FR",
+        "timeGeneva": "12:00 – 13:30 CET",
+        "timeNY": "06:00 – 07:30 EST",
+        "timeBangkok": "18:00 – 19:30 ICT"
+      },
+      {
+        "date": "Thursday, 12 Nov",
+        "lang": "ES",
+        "timeGeneva": "16:00 – 17:30 CET",
+        "timeNY": "10:00 – 11:30 EST",
+        "timeBangkok": "22:00 – 23:30 ICT"
+      }
+    ],
+    "footer": "🌟 Don't miss out on this valuable learning opportunity!"
+  }
 }
