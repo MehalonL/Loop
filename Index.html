@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Development Clinic - Poster</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Slow global screen shift animation for OLED burn-in protection */
+        @keyframes screenShift {
+            0% { transform: translate(0px, 0px); }
+            25% { transform: translate(4px, -4px); }
+            50% { transform: translate(0px, 6px); }
+            75% { transform: translate(-4px, 0px); }
+            100% { transform: translate(0px, 0px); }
+        }
+
+        body {
+            font-family: 'Open Sans', 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .poster-container {
+            width: 1080px;
+            height: 1920px;
+            position: relative;
+            background-color: #dbe4f0;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .bg-holder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .poster-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            animation: screenShift 60s ease-in-out infinite;
+        }
+
+        .brand-navy {
+            color: #1a3b8b;
+        }
+        .bg-brand-navy {
+            background-color: #1a3b8b;
+        }
+
+        /* Session card styling with semi-transparent background */
+        .session-card {
+            background-color: rgba(240, 245, 255, 0.72);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .session-card-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .session-card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .session-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 16px;
+            background-color: #1a3b8b;
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+            z-index: 3;
+        }
+    </style>
+</head>
+<body class="p-0 m-0">
+
+    <div class="poster-container">
+        
+        <!-- Main Background Canvas -->
+        <div class="bg-holder">
+            <ambient-circles id="main-ambient"></ambient-circles>
+        </div>
+
+        <!-- App UI Layer -->
+        <div id="poster-app" class="poster-content flex flex-col justify-between p-16">
+            <!-- Populated via script -->
+        </div>
+
+    </div>
+
+    <script>
+        // Embedded Data Payload
+        const signageData = {
+          "display": {
+            "backgroundColor": "#dbe4f0",
+            "logoUrl": "Docs/IOM75logo.png",
+            "circleCount": 48,
+            "animationSpeed": 1.0
+          },
+          "announcement": {
+            "badge": "CAREER DEVELOPMENT CLINIC",
+            "titleLine1": "Boost Your Applications:",
+            "titleLine2": "CVs & Motivation Letters",
+            "sessions": [
+              {
+                "id": "s1",
+                "date": "Tuesday, 10 Nov",
+                "lang": "EN",
+                "time": "11:00 AM - 12:30 PM",
+                "location": "Addis Ababa Time (EAT)",
+                "qrCode": "Docs/Tomorrow at 11-00 AM .png"
+              },
+              {
+                "id": "s2",
+                "date": "Tuesday, 10 Nov",
+                "lang": "EN",
+                "time": "6:00 PM - 7:30 PM",
+                "location": "Addis Ababa Time (EAT)",
+                "qrCode": "Docs/Tomorrow at 6-00 PM.png"
+              },
+              {
+                "id": "s3",
+                "date": "Thursday, 12 Nov",
+                "lang": "FR",
+                "time": "6:00 PM - 7:30 PM",
+                "location": "Addis Ababa Time (EAT)",
+                "qrCode": "Docs/Thursday, November 12, 6-00 PM.png"
+              },
+              {
+                "id": "s4",
+                "date": "Thursday, 12 Nov",
+                "lang": "ES",
+                "time": "6:00 PM - 7:30 PM",
+                "location": "Addis Ababa Time (EAT)",
+                "qrCode": "Docs/Thursday, November 12, 6-00 PM.png"
+              }
+            ],
+            "footer": "Don't miss out on this valuable learning opportunity!"
+          }
+        };
+
+        // Ambient Circles Web Component with even grid-cell dispersal
+        class AmbientCircles extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+            this.shadowRoot.innerHTML = `
+              <style>
+                :host {
+                  display: block;
+                  width: 100%;
+                  height: 100%;
+                  background-color: var(--bg-color, transparent);
+                }
+                canvas {
+                  width: 100%;
+                  height: 100%;
+                  display: block;
+                }
+              </style>
+              <canvas id="circleCanvas"></canvas>
+            `;
+            this.canvas = this.shadowRoot.getElementById('circleCanvas');
+            this.ctx = this.canvas.getContext('2d');
+            this.circles = [];
+            this.speedMultiplier = 1.0;
+          }
+
+          init(config, customWidth = 1080, customHeight = 1920, isCard = false) {
+            this.canvas.width = customWidth;
+            this.canvas.height = customHeight;
+
+            if (config.backgroundColor && !isCard) {
+              this.style.setProperty('--bg-color', config.backgroundColor);
+            } else {
+              this.style.setProperty('--bg-color', 'transparent');
+            }
+            this.speedMultiplier = config.animationSpeed || 1.0;
+
+            const baseColors = isCard 
+              ? [{ r: 120, g: 155, b: 220 }, { r: 160, g: 190, b: 240 }]
+              : [{ r: 26, g: 59, b: 139 }, { r: 64, g: 102, b: 184 }];
+
+            const count = config.circleCount || (isCard ? 18 : 48);
+            this.circles = [];
+
+            // Calculate a grid layout to guarantee even spatial dispersion across the canvas height & width
+            const cols = isCard ? 6 : 6;
+            const rows = Math.ceil(count / cols);
+            const cellW = customWidth / cols;
+            const cellH = customHeight / rows;
+
+            for (let i = 0; i < count; i++) {
+              const selectedColor = baseColors[i % baseColors.length];
+              const alpha = isCard ? (0.05 + Math.random() * 0.12).toFixed(2) : (0.08 + Math.random() * 0.22).toFixed(2);
+              
+              const minR = isCard ? 25 : (customWidth / 8);
+              const maxR = isCard ? 80 : (customWidth / 4);
+
+              // Grid-cell positioning with randomized jitter inside each cell
+              const row = Math.floor(i / cols);
+              const col = i % cols;
+              const posX = (col * cellW) + (Math.random() * cellW);
+              const posY = (row * cellH) + (Math.random() * cellH);
+
+              this.circles.push({
+                x: posX,
+                y: posY,
+                baseRadius: minR + Math.random() * (maxR - minR),
+                radius: 0,
+                color: `rgba(${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b}, ${alpha})`,
+                vx: (Math.random() - 0.5) * this.speedMultiplier,
+                vy: (Math.random() - 0.5) * this.speedMultiplier,
+                scaleAngle: Math.random() * Math.PI * 2,
+                scaleSpeed: 0.002 + Math.random() * 0.006
+              });
+            }
+
+            this.animate();
+          }
+
+          animate() {
+            const w = this.canvas.width;
+            const h = this.canvas.height;
+            
+            this.ctx.clearRect(0, 0, w, h);
+            this.ctx.globalCompositeOperation = 'multiply';
+
+            this.circles.forEach(c => {
+              c.x += c.vx;
+              c.y += c.vy;
+
+              // Soft bounce off padded boundaries to maintain uniform coverage
+              if (c.x < -100 || c.x > w + 100) c.vx *= -1;
+              if (c.y < -100 || c.y > h + 100) c.vy *= -1;
+
+              c.scaleAngle += c.scaleSpeed;
+              c.radius = c.baseRadius * (0.8 + Math.sin(c.scaleAngle) * 0.2);
+
+              this.ctx.beginPath();
+              this.ctx.fillStyle = c.color;
+              this.ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+              this.ctx.fill();
+            });
+
+            requestAnimationFrame(() => this.animate());
+          }
+        }
+        customElements.define('ambient-circles', AmbientCircles);
+
+        // Render Poster Content
+        function renderSignage() {
+          const data = signageData;
+          
+          const mainBg = document.getElementById('main-ambient');
+          if (mainBg && data.display) {
+            mainBg.init({ ...data.display, animationSpeed: 0.8 }, 1080, 1920, false);
+          }
+
+          const appContainer = document.getElementById('poster-app');
+          const item = data.announcement;
+
+          if (item && appContainer) {
+            let sessionsHTML = item.sessions.map((s, index) => {
+              const qrContent = s.qrCode 
+                ? `<img src="${encodeURI(s.qrCode)}" alt="QR Code" class="w-full h-full object-contain p-2">` 
+                : `<span class="text-slate-800 font-normal text-2xl">QR code Here</span>`;
+
+              return `
+                <div class="session-card p-9 pl-14 flex justify-between items-center" id="session-card-${index}">
+                    <div class="session-card-bg">
+                        <ambient-circles class="card-ambient"></ambient-circles>
+                    </div>
+                    <div class="session-card-content flex flex-col justify-center">
+                        <div class="flex items-center space-x-6 mb-6">
+                            <h3 class="text-5xl font-extrabold text-slate-900 tracking-tight">
+                                ${s.date}
+                            </h3>
+                            <span class="bg-brand-navy text-amber-400 font-extrabold text-2xl px-5 py-2 rounded-xl tracking-wide shadow-sm">
+                                ${s.lang}
+                            </span>
+                        </div>
+                        <p class="text-3xl text-slate-800 font-semibold mb-2">
+                            ${s.time}
+                        </p>
+                        <p class="text-3xl text-slate-700 font-medium">
+                            ${s.location}
+                        </p>
+                    </div>
+
+                    <div class="session-card-content flex flex-col items-center space-y-3">
+                        <div class="w-48 h-48 bg-white/95 rounded-2xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
+                            ${qrContent}
+                        </div>
+                        <span class="text-slate-700 text-2xl font-normal">Registration link</span>
+                    </div>
+                </div>
+              `;
+            }).join('');
+
+            const logoSectionHTML = data.display.logoUrl 
+              ? `<img src="${encodeURI(data.display.logoUrl)}" class="h-20 w-auto object-contain pr-4" alt="IOM 75 Logo">`
+              : `<div class="flex items-center space-x-6 pr-4">
+                  <div class="flex items-center space-x-3">
+                      <div class="w-14 h-14 border-2 border-brand-navy rounded-full flex items-center justify-center p-1">
+                          <svg class="w-full h-full fill-current brand-navy" viewBox="0 0 24 24">
+                              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                          </svg>
+                      </div>
+                      <div class="flex flex-col leading-none">
+                          <span class="text-4xl font-extrabold brand-navy tracking-widest">IOM</span>
+                          <span class="text-[13px] font-bold brand-navy tracking-wider mt-1">UN MIGRATION</span>
+                      </div>
+                  </div>
+                  <div class="h-12 w-[2px] bg-brand-navy/40"></div>
+                  <div class="flex flex-col items-center justify-center leading-none">
+                      <span class="text-[11px] font-bold brand-navy tracking-tighter opacity-80">1951 2026</span>
+                      <span class="text-4xl font-black italic brand-navy">75</span>
+                  </div>
+                 </div>`;
+
+            appContainer.innerHTML = `
+              <div class="w-full flex flex-col">
+                  <div class="w-full flex items-center justify-between mb-20">
+                      <div class="bg-brand-navy px-10 py-5 w-[650px] shadow-sm">
+                          <h1 class="text-white text-3xl font-bold tracking-wider uppercase font-sans">
+                              ${item.badge}
+                          </h1>
+                      </div>
+                      ${logoSectionHTML}
+                  </div>
+
+                  <div class="px-6 mb-12">
+                      <h2 class="text-5xl font-semibold brand-navy tracking-tight mb-3">
+                          ${item.titleLine1}
+                      </h2>
+                      <h1 class="text-6xl font-black brand-navy tracking-tight">
+                          ${item.titleLine2}
+                      </h1>
+                  </div>
+
+                  <div class="flex flex-col space-y-9 px-2">
+                      ${sessionsHTML}
+                  </div>
+              </div>
+
+              <div class="px-6 pb-8 pt-4">
+                  <p class="text-4xl font-normal brand-navy leading-tight max-w-[800px]">
+                      ${item.footer}
+                  </p>
+              </div>
+            `;
+
+            setTimeout(() => {
+              document.querySelectorAll('.session-card').forEach((card) => {
+                const cardAmbient = card.querySelector('.card-ambient');
+                if (cardAmbient) {
+                  const cardWidth = card.offsetWidth || 980;
+                  const cardHeight = card.offsetHeight || 220;
+                  cardAmbient.init({
+                    circleCount: 18,
+                    animationSpeed: 0.6
+                  }, cardWidth, cardHeight, true);
+                }
+              });
+            }, 50);
+          }
+        }
+
+        renderSignage();
+    </script>
+</body>
+</html>
