@@ -81,7 +81,7 @@
             background-color: #1a3b8b;
         }
 
-        /* Fluid session card styling matching the precise framework */
+        /* Fluid session card styling matching framework */
         .session-card {
             background-color: rgba(240, 245, 255, 0.85);
             backdrop-filter: blur(8px);
@@ -332,13 +332,18 @@
                 ? `<img src="${encodeURI(s.qrCode)}" alt="QR Code" class="w-full h-full object-contain p-1">` 
                 : `<span class="text-slate-800 font-normal text-xl">QR code Here</span>`;
 
+              const isToday = s.date.includes("10 Nov");
+              const statusBadge = isToday
+                ? `<span class="bg-emerald-600 text-white font-extrabold text-[1.4vh] px-2.5 py-0.5 rounded-md uppercase tracking-wider shadow-sm">Today</span>`
+                : `<span class="bg-slate-500 text-white font-bold text-[1.4vh] px-2.5 py-0.5 rounded-md uppercase tracking-wider shadow-sm">Upcoming</span>`;
+
               return `
                 <div class="session-card" id="session-card-${index}">
                     <div class="session-card-bg">
                         <ambient-circles class="card-ambient"></ambient-circles>
                     </div>
                     <div class="session-card-content flex flex-col justify-center pl-4">
-                        <div class="flex items-center space-x-4 mb-1">
+                        <div class="flex items-center space-x-3 mb-1">
                             <h3 class="text-[2.4vh] font-extrabold text-slate-900 tracking-tight">
                                 ${s.date}
                             </h3>
@@ -346,7 +351,10 @@
                                 ${s.lang}
                             </span>
                         </div>
-                        <p class="text-[1.8vh] text-slate-800 font-semibold mb-0.5">
+                        <div class="my-0.5">
+                            ${statusBadge}
+                        </div>
+                        <p class="text-[1.8vh] text-slate-800 font-semibold mb-0.5 mt-1">
                             ${s.time}
                         </p>
                         <p class="text-[1.8vh] text-slate-700 font-medium">
