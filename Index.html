@@ -88,7 +88,7 @@
             100% { transform: translateX(150%) skewX(-20deg); }
         }
 
-        /* Attention Pulse Keyframes for Next/Active Card */
+        /* Attention Pulse Keyframes for Active Card */
         @keyframes attentionPulse {
             0% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 0 rgba(16, 185, 129, 0.4); }
             50% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 1.2vh rgba(16, 185, 129, 0.2); }
@@ -371,28 +371,30 @@
           return num < 10 ? '0' + num : num;
         }
 
-        // Find the index of the next upcoming or currently live session
-        function getNextSessionIndex() {
+        // Find the index of the next upcoming or currently live session *strictly restricted to Today (Nov 10)*
+        function getNextTodaySessionIndex() {
           const now = new Date();
           const sessions = signageData.announcement.sessions;
           for (let i = 0; i < sessions.length; i++) {
             const s = sessions[i];
+            const isToday = (now.getDate() === s.day && now.getMonth() === s.month && now.getFullYear() === s.year);
             const targetEnd = new Date(s.year, s.month, s.day, s.endHour, s.endMin, 0);
-            if (targetEnd - now > 0) {
+            if (isToday && targetEnd - now > 0) {
               return i;
             }
           }
           return -1;
         }
 
-        // Check if card frame should pulse (only for the single next/live session)
+        // Check if card frame should pulse (only for today's active/next session)
         function isCardActive(s, index) {
           const now = new Date();
           const targetEnd = new Date(s.year, s.month, s.day, s.endHour, s.endMin, 0);
-          return (targetEnd - now > 0) && (index === getNextSessionIndex());
+          const isToday = (now.getDate() === s.day && now.getMonth() === s.month && now.getFullYear() === s.year);
+          return isToday && (targetEnd - now > 0) && (index === getNextTodaySessionIndex());
         }
 
-        // Badge & Countdown logic: applies countdown ONLY to the next upcoming session
+        // Badge & Countdown logic: applies countdown ONLY to today's next upcoming session
         function getSessionBadgeHTML(s, index) {
           const now = new Date();
           const targetStart = new Date(s.year, s.month, s.day, s.startHour, s.startMin, 0);
@@ -400,25 +402,25 @@
 
           const diffStart = targetStart - now;
           const diffEnd = targetEnd - now;
-          const nextIdx = getNextSessionIndex();
-          const isNextSession = (index === nextIdx);
+          const nextTodayIdx = getNextTodaySessionIndex();
+          const isNextTodaySession = (index === nextTodayIdx);
+          const isToday = (now.getDate() === s.day && now.getMonth() === s.month && now.getFullYear() === s.year);
 
           if (diffStart <= 0 && diffEnd > 0) {
             return `<span class="badge-live-pulse bg-orange-500 text-white font-black text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider shadow-md inline-block my-0.5">● LIVE NOW</span>`;
-          } else if (diffEnd <= 0) {
+          } else if (diffEnd <= 0 && isToday) {
             return `<span class="bg-slate-600 text-slate-300 font-semibold text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider inline-block my-0.5">Ended</span>`;
-          } else if (isNextSession && diffStart > 0) {
-            // Countdown timer ONLY for the single next upcoming session
+          } else if (isNextTodaySession && diffStart > 0) {
+            // Countdown timer ONLY for today's next upcoming session
             const hrs = Math.floor(diffStart / (1000 * 60 * 60));
             const mins = Math.floor((diffStart % (1000 * 60 * 60)) / (1000 * 60));
             const secs = Math.floor((diffStart % (1000 * 60)) / 1000);
 
             return `<div class="flex items-center space-x-2 my-0.5">
-              <span class="bg-emerald-600 text-white font-extrabold text-[1.2vh] px-2 py-0.5 rounded uppercase tracking-wider shadow-sm shrink-0">Next Session</span>
+              <span class="bg-emerald-600 text-white font-extrabold text-[1.2vh] px-2 py-0.5 rounded uppercase tracking-wider shadow-sm shrink-0">Today</span>
               <span class="text-orange-500 font-extrabold text-[1.3vh] tracking-wide whitespace-nowrap">Starts in ${padZero(hrs)}h ${padZero(mins)}m ${padZero(secs)}s</span>
             </div>`;
           } else {
-            const isToday = (now.getDate() === s.day && now.getMonth() === s.month && now.getFullYear() === s.year);
             if (isToday) {
               return `<span class="bg-emerald-600 text-white font-extrabold text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider shadow-sm inline-block my-0.5">Today</span>`;
             } else {
