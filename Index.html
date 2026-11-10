@@ -172,6 +172,26 @@
             border-bottom-left-radius: 1.5vh;
             z-index: 3;
         }
+
+        /* Glassmorphism accent card for bottom footer callout */
+        .footer-banner {
+            background: linear-gradient(135deg, rgba(26, 59, 139, 0.95), rgba(15, 30, 80, 0.98));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 1.5vh 3.5vh rgba(15, 23, 42, 0.25);
+            border-radius: 1.6vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1.2vh;
+            height: 100%;
+            background: #f59e0b;
+        }
     </style>
 </head>
 <body>
@@ -371,7 +391,7 @@
           return num < 10 ? '0' + num : num;
         }
 
-        // Find the index of the next upcoming or currently live session *strictly restricted to Today (Nov 10)*
+        // Find the index of the next upcoming or currently live session strictly restricted to Today (Nov 10)
         function getNextTodaySessionIndex() {
           const now = new Date();
           const sessions = signageData.announcement.sessions;
@@ -394,7 +414,7 @@
           return isToday && (targetEnd - now > 0) && (index === getNextTodaySessionIndex());
         }
 
-        // Badge & Countdown logic: applies countdown ONLY to today's next upcoming session
+        // Badge & Countdown logic: Tag updated to "Next Session" for today's upcoming slot
         function getSessionBadgeHTML(s, index) {
           const now = new Date();
           const targetStart = new Date(s.year, s.month, s.day, s.startHour, s.startMin, 0);
@@ -411,18 +431,18 @@
           } else if (diffEnd <= 0 && isToday) {
             return `<span class="bg-slate-600 text-slate-300 font-semibold text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider inline-block my-0.5">Ended</span>`;
           } else if (isNextTodaySession && diffStart > 0) {
-            // Countdown timer ONLY for today's next upcoming session
+            // "Next Session" Tag with countdown timer strictly for today's upcoming session
             const hrs = Math.floor(diffStart / (1000 * 60 * 60));
             const mins = Math.floor((diffStart % (1000 * 60 * 60)) / (1000 * 60));
             const secs = Math.floor((diffStart % (1000 * 60)) / 1000);
 
             return `<div class="flex items-center space-x-2 my-0.5">
-              <span class="bg-emerald-600 text-white font-extrabold text-[1.2vh] px-2 py-0.5 rounded uppercase tracking-wider shadow-sm shrink-0">Today</span>
+              <span class="bg-emerald-600 text-white font-extrabold text-[1.2vh] px-2 py-0.5 rounded uppercase tracking-wider shadow-sm shrink-0">Next Session</span>
               <span class="text-orange-500 font-extrabold text-[1.3vh] tracking-wide whitespace-nowrap">Starts in ${padZero(hrs)}h ${padZero(mins)}m ${padZero(secs)}s</span>
             </div>`;
           } else {
             if (isToday) {
-              return `<span class="bg-emerald-600 text-white font-extrabold text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider shadow-sm inline-block my-0.5">Today</span>`;
+              return `<span class="bg-emerald-600 text-white font-extrabold text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider shadow-sm inline-block my-0.5">Next Session</span>`;
             } else {
               return `<span class="bg-slate-500 text-white font-bold text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider shadow-sm inline-block my-0.5">Upcoming</span>`;
             }
@@ -528,10 +548,16 @@
                     </div>
                 </div>
 
-                <div class="w-full flex justify-start pt-1">
-                    <p class="text-[3.2vh] font-black brand-navy tracking-tight leading-tight uppercase max-w-[85%]">
+                <!-- Bold, interesting high-impact footer banner -->
+                <div class="w-full footer-banner p-3.5 pl-5 flex items-center justify-between">
+                    <p class="text-[2.6vh] font-black text-amber-400 tracking-tight leading-snug uppercase max-w-[85%] drop-shadow">
                         ${item.footer}
                     </p>
+                    <div class="bg-amber-500 text-slate-900 rounded-full p-2.5 shadow-lg flex items-center justify-center shrink-0">
+                        <svg class="w-[3vh] h-[3vh] fill-current" viewBox="0 0 24 24">
+                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+                        </svg>
+                    </div>
                 </div>
               `;
 
