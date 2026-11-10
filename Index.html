@@ -9,7 +9,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -90,7 +90,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04);
-            padding: 1.8vh 2.5vw;
+            padding: 1.6vh 2.5vw;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -344,29 +344,29 @@
                     </div>
                     <div class="session-card-content flex flex-col justify-center pl-4">
                         <div class="flex items-center space-x-3 mb-1">
-                            <h3 class="text-[2.4vh] font-extrabold text-slate-900 tracking-tight">
+                            <h3 class="text-[2.3vh] font-extrabold text-slate-900 tracking-tight">
                                 ${s.date}
                             </h3>
-                            <span class="bg-brand-navy text-amber-400 font-extrabold text-[1.6vh] px-3 py-1 rounded-lg tracking-wide shadow-sm">
+                            <span class="bg-brand-navy text-amber-400 font-extrabold text-[1.5vh] px-3 py-1 rounded-lg tracking-wide shadow-sm">
                                 ${s.lang}
                             </span>
                         </div>
                         <div class="my-0.5">
                             ${statusBadge}
                         </div>
-                        <p class="text-[1.8vh] text-slate-800 font-semibold mb-0.5 mt-1">
+                        <p class="text-[1.7vh] text-slate-800 font-semibold mb-0.5 mt-0.5">
                             ${s.time}
                         </p>
-                        <p class="text-[1.8vh] text-slate-700 font-medium">
+                        <p class="text-[1.7vh] text-slate-700 font-medium">
                             ${s.location}
                         </p>
                     </div>
 
                     <div class="session-card-content flex flex-col items-center space-y-1 pr-1">
-                        <div class="w-[10vh] h-[10vh] bg-white/95 rounded-xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
+                        <div class="w-[9.5vh] h-[9.5vh] bg-white/95 rounded-xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
                             ${qrContent}
                         </div>
-                        <span class="text-slate-700 text-[1.4vh] font-normal">Registration link</span>
+                        <span class="text-slate-700 text-[1.3vh] font-normal">Registration link</span>
                     </div>
                 </div>
               `;
@@ -399,11 +399,11 @@
                       ${logoSectionHTML}
                   </div>
 
-                  <div class="mb-2.5">
-                      <h2 class="text-[2.5vh] font-semibold brand-navy tracking-tight mb-0.5">
+                  <div class="mb-2">
+                      <h2 class="text-[2.4vh] font-semibold brand-navy tracking-tight mb-0.5">
                           ${item.titleLine1}
                       </h2>
-                      <h1 class="text-[3.4vh] font-black brand-navy tracking-tight">
+                      <h1 class="text-[3.2vh] font-black brand-navy tracking-tight">
                           ${item.titleLine2}
                       </h1>
                   </div>
@@ -413,8 +413,8 @@
                   </div>
               </div>
 
-              <div>
-                  <p class="text-[2vh] font-normal brand-navy leading-tight">
+              <div class="pt-2">
+                  <p class="text-[4vh] font-black brand-navy leading-tight tracking-tight">
                       ${item.footer}
                   </p>
               </div>
