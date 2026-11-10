@@ -81,27 +81,6 @@
             background-color: #1a3b8b;
         }
 
-        /* Shimmer Animation Keyframes */
-        @keyframes shimmer {
-            0% { transform: translateX(-150%) skewX(-20deg); }
-            20% { transform: translateX(150%) skewX(-20deg); }
-            100% { transform: translateX(150%) skewX(-20deg); }
-        }
-
-        /* Attention Pulse Keyframes for Active Cards */
-        @keyframes attentionPulse {
-            0% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            50% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 1.2vh rgba(16, 185, 129, 0.2); }
-            100% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        /* Live Pulse Animation */
-        @keyframes livePulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.75; transform: scale(1.04); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
         /* Fluid session card styling matching framework */
         .session-card {
             background-color: rgba(240, 245, 255, 0.85);
@@ -111,38 +90,10 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04);
-            padding: 1.4vh 2.5vw;
+            padding: 1.8vh 2.5vw;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: border 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .session-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            pointer-events: none;
-            animation: shimmer 6s infinite ease-in-out;
-            z-index: 4;
-        }
-
-        #session-card-0::after { animation-delay: 0s; }
-        #session-card-1::after { animation-delay: 1.5s; }
-        #session-card-2::after { animation-delay: 3s; }
-        #session-card-3::after { animation-delay: 4.5s; }
-
-        .session-card.today-card {
-            border: 2px solid rgba(16, 185, 129, 0.8);
-            animation: attentionPulse 3s infinite ease-in-out;
-        }
-
-        .badge-live-pulse {
-            animation: livePulse 1.5s infinite ease-in-out;
         }
 
         .session-card-bg {
@@ -198,17 +149,15 @@
         /* DYNAMIC SCREEN LOCK */
         function lockScreenSize() {
             const viewport = document.getElementById('viewport');
-            if (viewport) {
-                const realHeight = window.innerHeight || document.documentElement.clientHeight;
-                viewport.style.height = realHeight + 'px';
-            }
+            const realHeight = window.innerHeight || document.documentElement.clientHeight;
+            viewport.style.height = realHeight + 'px';
         }
 
         window.addEventListener('resize', lockScreenSize);
         window.addEventListener('load', lockScreenSize);
         lockScreenSize();
 
-        // Embedded Data Payload with Structured Date Parameters
+        // Embedded Data Payload
         const signageData = {
           "display": {
             "backgroundColor": "#dbe4f0",
@@ -225,9 +174,6 @@
                 "id": "s1",
                 "date": "Tuesday, 10 Nov",
                 "lang": "EN",
-                "year": 2026, "month": 10, "day": 10,
-                "startHour": 11, "startMin": 0,
-                "endHour": 12, "endMin": 30,
                 "time": "11:00 AM - 12:30 PM",
                 "location": "Addis Ababa Time (EAT)",
                 "qrCode": "Docs/Tomorrow at 11-00 AM .png"
@@ -236,9 +182,6 @@
                 "id": "s2",
                 "date": "Tuesday, 10 Nov",
                 "lang": "EN",
-                "year": 2026, "month": 10, "day": 10,
-                "startHour": 18, "startMin": 0,
-                "endHour": 19, "endMin": 30,
                 "time": "6:00 PM - 7:30 PM",
                 "location": "Addis Ababa Time (EAT)",
                 "qrCode": "Docs/Tomorrow at 6-00 PM.png"
@@ -247,9 +190,6 @@
                 "id": "s3",
                 "date": "Thursday, 12 Nov",
                 "lang": "FR",
-                "year": 2026, "month": 10, "day": 12,
-                "startHour": 14, "startMin": 0,
-                "endHour": 15, "endMin": 30,
                 "time": "2:00 PM - 3:30 PM",
                 "location": "Addis Ababa Time (EAT)",
                 "qrCode": "Docs/Thursday, November 12, 2-00 PM.png"
@@ -258,9 +198,6 @@
                 "id": "s4",
                 "date": "Thursday, 12 Nov",
                 "lang": "ES",
-                "year": 2026, "month": 10, "day": 12,
-                "startHour": 18, "startMin": 0,
-                "endHour": 19, "endMin": 30,
                 "time": "6:00 PM - 7:30 PM",
                 "location": "Addis Ababa Time (EAT)",
                 "qrCode": "Docs/Thursday, November 12, 6-00 PM.png"
@@ -277,8 +214,17 @@
             this.attachShadow({ mode: 'open' });
             this.shadowRoot.innerHTML = `
               <style>
-                :host { display: block; width: 100%; height: 100%; background-color: var(--bg-color, transparent); }
-                canvas { width: 100%; height: 100%; display: block; }
+                :host {
+                  display: block;
+                  width: 100%;
+                  height: 100%;
+                  background-color: var(--bg-color, transparent);
+                }
+                canvas {
+                  width: 100%;
+                  height: 100%;
+                  display: block;
+                }
               </style>
               <canvas id="circleCanvas"></canvas>
             `;
@@ -289,7 +235,6 @@
           }
 
           init(config, customWidth = window.innerWidth, customHeight = window.innerHeight, isCard = false) {
-            if (!this.canvas) return;
             this.canvas.width = customWidth;
             this.canvas.height = customHeight;
 
@@ -315,6 +260,7 @@
             for (let i = 0; i < count; i++) {
               const selectedColor = baseColors[i % baseColors.length];
               const alpha = isCard ? (0.03 + Math.random() * 0.06).toFixed(2) : (0.06 + Math.random() * 0.12).toFixed(2);
+              
               const minR = isCard ? 15 : (customWidth / 8);
               const maxR = isCard ? 50 : (customWidth / 4);
 
@@ -324,7 +270,8 @@
               const posY = (row * cellH) + (Math.random() * cellH);
 
               this.circles.push({
-                x: posX, y: posY,
+                x: posX,
+                y: posY,
                 baseRadius: minR + Math.random() * (maxR - minR),
                 radius: 0,
                 color: `rgba(${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b}, ${alpha})`,
@@ -334,11 +281,11 @@
                 scaleSpeed: 0.01 + Math.random() * 0.02
               });
             }
+
             this.animate();
           }
 
           animate() {
-            if (!this.ctx || !this.canvas) return;
             const w = this.canvas.width;
             const h = this.canvas.height;
             
@@ -348,6 +295,7 @@
             this.circles.forEach(c => {
               c.x += c.vx;
               c.y += c.vy;
+
               if (c.x < -100 || c.x > w + 100) c.vx *= -1;
               if (c.y < -100 || c.y > h + 100) c.vy *= -1;
 
@@ -363,211 +311,133 @@
             requestAnimationFrame(() => this.animate());
           }
         }
-        if (!customElements.get('ambient-circles')) {
-          customElements.define('ambient-circles', AmbientCircles);
-        }
+        customElements.define('ambient-circles', AmbientCircles);
 
-        function padZero(num) {
-          return num < 10 ? '0' + num : num;
-        }
-
-        function getProgressiveColorStyle(diffMs) {
-          const maxMs = 3 * 60 * 60 * 1000;
-          let ratio = Math.max(0, Math.min(1, diffMs / maxMs));
-          const r = Math.round(234 + (34 - 234) * ratio);
-          const g = Math.round(88 + (197 - 88) * ratio);
-          const b = Math.round(12 + (94 - 12) * ratio);
-          return `color: rgb(${r}, ${g}, ${b});`;
-        }
-
-        function isCardActive(s) {
-          const now = new Date();
-          const targetEnd = new Date(s.year, s.month, s.day, s.endHour, s.endMin, 0);
-          const isToday = (now.getDate() === s.day && now.getMonth() === s.month && now.getFullYear() === s.year);
-          return isToday && (targetEnd - now > 0);
-        }
-
-        function getSessionBadgeHTML(s) {
-          const now = new Date();
-          const targetStart = new Date(s.year, s.month, s.day, s.startHour, s.startMin, 0);
-          const targetEnd = new Date(s.year, s.month, s.day, s.endHour, s.endMin, 0);
-
-          const diffStart = targetStart - now;
-          const diffEnd = targetEnd - now;
-          const threeHoursMs = 3 * 60 * 60 * 1000;
-
-          if (diffStart <= 0 && diffEnd > 0) {
-            return `<span class="badge-live-pulse bg-orange-500 text-white font-black text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider shadow-md inline-block my-0.5">● LIVE NOW</span>`;
-          } else if (diffEnd <= 0) {
-            return `<span class="bg-slate-600 text-slate-300 font-semibold text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider inline-block my-0.5">Ended</span>`;
-          } else if (diffStart <= threeHoursMs) {
-            const isToday = (now.getDate() === s.day && now.getMonth() === s.month && now.getFullYear() === s.year);
-            const tagLabel = isToday ? "Today" : "Upcoming";
-            
-            const hrs = Math.floor(diffStart / (1000 * 60 * 60));
-            const mins = Math.floor((diffStart % (1000 * 60 * 60)) / (1000 * 60));
-            const secs = Math.floor((diffStart % (1000 * 60)) / 1000);
-            const colorStyle = getProgressiveColorStyle(diffStart);
-
-            return `<div class="flex items-center space-x-2 my-0.5">
-              <span class="bg-emerald-600 text-white font-extrabold text-[1.2vh] px-2 py-0.5 rounded uppercase tracking-wider shadow-sm shrink-0">${tagLabel}</span>
-              <span style="${colorStyle}" class="font-extrabold text-[1.3vh] tracking-wide whitespace-nowrap">Starts in ${padZero(hrs)}h ${padZero(mins)}m ${padZero(secs)}s</span>
-            </div>`;
-          } else {
-            const isToday = (now.getDate() === s.day && now.getMonth() === s.month && now.getFullYear() === s.year);
-            if (isToday) {
-              return `<span class="bg-emerald-600 text-white font-extrabold text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider shadow-sm inline-block my-0.5">Today</span>`;
-            } else {
-              return `<span class="bg-slate-500 text-white font-bold text-[1.3vh] px-2.5 py-0.5 rounded uppercase tracking-wider shadow-sm inline-block my-0.5">Upcoming</span>`;
-            }
-          }
-        }
-
+        // Render Poster Content
         function renderSignage() {
-          try {
-            lockScreenSize();
-            const data = signageData;
-            
-            const mainBg = document.getElementById('main-ambient');
-            if (mainBg && data.display) {
-              mainBg.init({ ...data.display, animationSpeed: 5.0 }, window.innerWidth, window.innerHeight, false);
-            }
+          lockScreenSize();
+          const data = signageData;
+          
+          const mainBg = document.getElementById('main-ambient');
+          if (mainBg && data.display) {
+            mainBg.init({ ...data.display, animationSpeed: 5.0 }, window.innerWidth, window.innerHeight, false);
+          }
 
-            const appContainer = document.getElementById('poster-app');
-            const item = data.announcement;
+          const appContainer = document.getElementById('poster-app');
+          const item = data.announcement;
 
-            if (item && appContainer) {
-              let sessionsHTML = item.sessions.map((s, index) => {
-                const encodedQr = s.qrCode ? encodeURI(s.qrCode) : '';
-                const qrContent = s.qrCode 
-                  ? `<img src="${encodedQr}" alt="QR Code" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-slate-700 font-semibold text-center text-[1.1vh]\\'>Scan QR</span>';">` 
-                  : `<span class="text-slate-800 font-normal text-xl">QR code Here</span>`;
+          if (item && appContainer) {
+            let sessionsHTML = item.sessions.map((s, index) => {
+              const qrContent = s.qrCode 
+                ? `<img src="${encodeURI(s.qrCode)}" alt="QR Code" class="w-full h-full object-contain p-1">` 
+                : `<span class="text-slate-800 font-normal text-xl">QR code Here</span>`;
 
-                const cardClass = isCardActive(s) ? "session-card today-card" : "session-card";
+              const isToday = s.date.includes("10 Nov");
+              const statusBadge = isToday
+                ? `<span class="bg-emerald-600 text-white font-extrabold text-[1.4vh] px-2.5 py-0.5 rounded-md uppercase tracking-wider shadow-sm">Today</span>`
+                : `<span class="bg-slate-500 text-white font-bold text-[1.4vh] px-2.5 py-0.5 rounded-md uppercase tracking-wider shadow-sm">Upcoming</span>`;
 
-                return `
-                  <div class="${cardClass}" id="session-card-${index}">
-                      <div class="session-card-bg">
-                          <ambient-circles class="card-ambient"></ambient-circles>
-                      </div>
-                      <div class="session-card-content flex flex-col justify-center pl-4">
-                          <div class="flex items-center space-x-3 mb-1">
-                              <h3 class="text-[2.2vh] font-extrabold text-slate-900 tracking-tight">
-                                  ${s.date}
-                              </h3>
-                              <span class="bg-brand-navy text-amber-400 font-extrabold text-[1.5vh] px-3 py-1 rounded-lg tracking-wide shadow-sm">
-                                  ${s.lang}
-                              </span>
-                          </div>
-                          <div id="badge-container-${s.id}">
-                              ${getSessionBadgeHTML(s)}
-                          </div>
-                          <p class="text-[1.6vh] text-slate-800 font-semibold mb-0.5 mt-0.5">
-                              ${s.time}
-                          </p>
-                          <p class="text-[1.5vh] text-slate-700 font-medium">
-                              ${s.location}
-                          </p>
-                      </div>
-
-                      <div class="session-card-content flex flex-col items-center space-y-1 pr-1">
-                          <div class="w-[9vh] h-[9vh] bg-white/95 rounded-xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
-                              ${qrContent}
-                          </div>
-                          <span class="text-slate-700 text-[1.3vh] font-normal">Registration link</span>
-                      </div>
-                  </div>
-                `;
-              }).join('');
-
-              const logoSectionHTML = data.display.logoUrl 
-                ? `<img src="${encodeURI(data.display.logoUrl)}" class="h-[6vh] w-auto object-contain" alt="IOM Logo" onerror="this.onerror=null; this.outerHTML='<div class=\\'flex items-center space-x-2\\'><span class=\\'text-[2.5vh] font-extrabold brand-navy\\'>IOM</span></div>';">`
-                : `<div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-10 h-10 border-2 border-brand-navy rounded-full flex items-center justify-center p-1">
-                            <svg class="w-full h-full fill-current brand-navy" viewBox="0 0 24 24">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                            </svg>
+              return `
+                <div class="session-card" id="session-card-${index}">
+                    <div class="session-card-bg">
+                        <ambient-circles class="card-ambient"></ambient-circles>
+                    </div>
+                    <div class="session-card-content flex flex-col justify-center pl-4">
+                        <div class="flex items-center space-x-3 mb-1">
+                            <h3 class="text-[2.4vh] font-extrabold text-slate-900 tracking-tight">
+                                ${s.date}
+                            </h3>
+                            <span class="bg-brand-navy text-amber-400 font-extrabold text-[1.6vh] px-3 py-1 rounded-lg tracking-wide shadow-sm">
+                                ${s.lang}
+                            </span>
                         </div>
-                        <div class="flex flex-col leading-none">
-                            <span class="text-[2.5vh] font-extrabold brand-navy tracking-widest">IOM</span>
-                            <span class="text-[1vh] font-bold brand-navy tracking-wider mt-0.5">UN MIGRATION</span>
+                        <div class="my-0.5">
+                            ${statusBadge}
                         </div>
+                        <p class="text-[1.8vh] text-slate-800 font-semibold mb-0.5 mt-1">
+                            ${s.time}
+                        </p>
+                        <p class="text-[1.8vh] text-slate-700 font-medium">
+                            ${s.location}
+                        </p>
                     </div>
-                   </div>`;
 
-              appContainer.innerHTML = `
-                <div class="w-full flex flex-col">
-                    <div class="w-full flex items-center justify-between mb-2">
-                        <div class="bg-brand-navy px-6 py-2.5 w-[55%] shadow-sm">
-                            <h1 class="text-white text-[1.6vh] font-bold tracking-wider uppercase font-sans">
-                                ${item.badge}
-                            </h1>
+                    <div class="session-card-content flex flex-col items-center space-y-1 pr-1">
+                        <div class="w-[10vh] h-[10vh] bg-white/95 rounded-xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
+                            ${qrContent}
                         </div>
-                        ${logoSectionHTML}
+                        <span class="text-slate-700 text-[1.4vh] font-normal">Registration link</span>
                     </div>
-
-                    <div class="mb-2">
-                        <h2 class="text-[2.3vh] font-semibold brand-navy tracking-tight mb-0.5">
-                            ${item.titleLine1}
-                        </h2>
-                        <h1 class="text-[3.2vh] font-black brand-navy tracking-tight">
-                            ${item.titleLine2}
-                        </h1>
-                    </div>
-
-                    <div class="flex flex-col space-y-1.5">
-                        ${sessionsHTML}
-                    </div>
-                </div>
-
-                <div class="pt-1">
-                    <p class="text-[2.5vh] font-black brand-navy leading-tight tracking-tight uppercase">
-                        ${item.footer}
-                    </p>
                 </div>
               `;
+            }).join('');
 
-              setTimeout(() => {
-                document.querySelectorAll('.session-card').forEach((card) => {
-                  const cardAmbient = card.querySelector('.card-ambient');
-                  if (cardAmbient && typeof cardAmbient.init === 'function') {
-                    cardAmbient.init({
-                      circleCount: 54,
-                      animationSpeed: 5.0
-                    }, card.offsetWidth, card.offsetHeight, true);
-                  }
-                });
-              }, 50);
-            }
-          } catch (err) {
-            console.error("Render error caught safely:", err);
+            const logoSectionHTML = data.display.logoUrl 
+              ? `<img src="${encodeURI(data.display.logoUrl)}" class="h-[6vh] w-auto object-contain" alt="IOM Logo">`
+              : `<div class="flex items-center space-x-4">
+                  <div class="flex items-center space-x-2">
+                      <div class="w-10 h-10 border-2 border-brand-navy rounded-full flex items-center justify-center p-1">
+                          <svg class="w-full h-full fill-current brand-navy" viewBox="0 0 24 24">
+                              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                          </svg>
+                      </div>
+                      <div class="flex flex-col leading-none">
+                          <span class="text-[2.5vh] font-extrabold brand-navy tracking-widest">IOM</span>
+                          <span class="text-[1vh] font-bold brand-navy tracking-wider mt-0.5">UN MIGRATION</span>
+                      </div>
+                  </div>
+                 </div>`;
+
+            appContainer.innerHTML = `
+              <div class="w-full flex flex-col">
+                  <div class="w-full flex items-center justify-between mb-3">
+                      <div class="bg-brand-navy px-6 py-2.5 w-[55%] shadow-sm">
+                          <h1 class="text-white text-[1.6vh] font-bold tracking-wider uppercase font-sans">
+                              ${item.badge}
+                          </h1>
+                      </div>
+                      ${logoSectionHTML}
+                  </div>
+
+                  <div class="mb-2.5">
+                      <h2 class="text-[2.5vh] font-semibold brand-navy tracking-tight mb-0.5">
+                          ${item.titleLine1}
+                      </h2>
+                      <h1 class="text-[3.4vh] font-black brand-navy tracking-tight">
+                          ${item.titleLine2}
+                      </h1>
+                  </div>
+
+                  <div class="flex flex-col space-y-2">
+                      ${sessionsHTML}
+                  </div>
+              </div>
+
+              <div class="w-full flex items-center justify-center text-center py-2">
+                  <p class="text-[3.8vh] font-black brand-navy tracking-tight leading-tight uppercase w-full">
+                      ${item.footer}
+                  </p>
+              </div>
+            `;
+
+            setTimeout(() => {
+              document.querySelectorAll('.session-card').forEach((card) => {
+                const cardAmbient = card.querySelector('.card-ambient');
+                if (cardAmbient) {
+                  cardAmbient.init({
+                    circleCount: 54,
+                    animationSpeed: 5.0
+                  }, card.offsetWidth, card.offsetHeight, true);
+                }
+              });
+            }, 50);
           }
         }
 
-        window.addEventListener('load', renderSignage);
-        window.addEventListener('resize', renderSignage);
         renderSignage();
-
-        // Real-time state ticker (updates countdown & badge states every second)
-        setInterval(() => {
-          try {
-            signageData.announcement.sessions.forEach((s, idx) => {
-              const badgeEl = document.getElementById(`badge-container-${s.id}`);
-              if (badgeEl) {
-                badgeEl.innerHTML = getSessionBadgeHTML(s);
-              }
-              const cardEl = document.getElementById(`session-card-${idx}`);
-              if (cardEl) {
-                if (isCardActive(s)) {
-                  cardEl.classList.add("today-card");
-                } else {
-                  cardEl.classList.remove("today-card");
-                }
-              }
-            });
-          } catch (e) {}
-        }, 1000);
+        window.addEventListener('resize', () => {
+          renderSignage();
+        });
     </script>
 </body>
 </html>
