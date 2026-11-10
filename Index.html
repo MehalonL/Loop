@@ -17,9 +17,6 @@
             padding: 0;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
@@ -47,7 +44,6 @@
             height: 100%;
             overflow: hidden;
             background: #dbe4f0;
-            touch-action: none;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -81,28 +77,24 @@
             background-color: #1a3b8b;
         }
 
-        /* Shimmer Animation Keyframes */
         @keyframes shimmer {
             0% { transform: translateX(-150%) skewX(-20deg); }
             20% { transform: translateX(150%) skewX(-20deg); }
             100% { transform: translateX(150%) skewX(-20deg); }
         }
 
-        /* Attention Pulse Keyframes for Active Cards */
         @keyframes attentionPulse {
             0% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 0 rgba(16, 185, 129, 0.4); }
             50% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 1.2vh rgba(16, 185, 129, 0.2); }
             100% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
-        /* Live Pulse Animation */
         @keyframes livePulse {
             0% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.75; transform: scale(1.04); }
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* Fluid session card styling with light shimmer sweep */
         .session-card {
             background-color: rgba(240, 245, 255, 0.85);
             backdrop-filter: blur(8px);
@@ -118,7 +110,6 @@
             transition: border 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Light Shimmer Glare Overlay */
         .session-card::after {
             content: '';
             position: absolute;
@@ -126,12 +117,7 @@
             left: 0;
             width: 50%;
             height: 100%;
-            background: linear-gradient(
-                90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.4), 
-                transparent
-            );
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
             pointer-events: none;
             animation: shimmer 6s infinite ease-in-out;
             z-index: 4;
@@ -142,7 +128,6 @@
         #session-card-2::after { animation-delay: 3s; }
         #session-card-3::after { animation-delay: 4.5s; }
 
-        /* Today's active card pulse state */
         .session-card.today-card {
             border: 2px solid rgba(16, 185, 129, 0.8);
             animation: attentionPulse 3s infinite ease-in-out;
@@ -184,36 +169,27 @@
 <body>
 
     <div class="display-viewport" id="viewport">
-        <!-- Main Background Canvas -->
         <div class="bg-holder">
             <ambient-circles id="main-ambient"></ambient-circles>
         </div>
-
-        <!-- App UI Layer -->
-        <div id="poster-app" class="poster-content">
-            <!-- Populated via script -->
-        </div>
+        <div id="poster-app" class="poster-content"></div>
     </div>
 
     <script>
-        /* TOUCH & CONTEXT LOCK */
-        document.addEventListener('touchstart', function(e) { e.preventDefault(); }, { passive: false });
-        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
-        document.addEventListener('touchend', function(e) { e.preventDefault(); }, { passive: false });
-        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+        document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+        document.addEventListener('touchend', e => e.preventDefault(), { passive: false });
+        document.addEventListener('contextmenu', e => e.preventDefault());
 
-        /* DYNAMIC SCREEN LOCK */
         function lockScreenSize() {
             const viewport = document.getElementById('viewport');
-            const realHeight = window.innerHeight || document.documentElement.clientHeight;
-            viewport.style.height = realHeight + 'px';
+            if (viewport) {
+                viewport.style.height = (window.innerHeight || document.documentElement.clientHeight) + 'px';
+            }
         }
-
         window.addEventListener('resize', lockScreenSize);
         window.addEventListener('load', lockScreenSize);
-        lockScreenSize();
 
-        // Embedded Data Payload with ISO Target Dates for Unified Logic
         const signageData = {
           "display": {
             "backgroundColor": "#dbe4f0",
@@ -275,24 +251,14 @@
           }
         };
 
-        // Ambient Circles Web Component
         class AmbientCircles extends HTMLElement {
           constructor() {
             super();
             this.attachShadow({ mode: 'open' });
             this.shadowRoot.innerHTML = `
               <style>
-                :host {
-                  display: block;
-                  width: 100%;
-                  height: 100%;
-                  background-color: var(--bg-color, transparent);
-                }
-                canvas {
-                  width: 100%;
-                  height: 100%;
-                  display: block;
-                }
+                :host { display: block; width: 100%; height: 100%; background-color: var(--bg-color, transparent); }
+                canvas { width: 100%; height: 100%; display: block; }
               </style>
               <canvas id="circleCanvas"></canvas>
             `;
@@ -303,6 +269,7 @@
           }
 
           init(config, customWidth = window.innerWidth, customHeight = window.innerHeight, isCard = false) {
+            if (!this.canvas) return;
             this.canvas.width = customWidth;
             this.canvas.height = customHeight;
 
@@ -328,7 +295,6 @@
             for (let i = 0; i < count; i++) {
               const selectedColor = baseColors[i % baseColors.length];
               const alpha = isCard ? (0.03 + Math.random() * 0.06).toFixed(2) : (0.06 + Math.random() * 0.12).toFixed(2);
-              
               const minR = isCard ? 15 : (customWidth / 8);
               const maxR = isCard ? 50 : (customWidth / 4);
 
@@ -338,8 +304,7 @@
               const posY = (row * cellH) + (Math.random() * cellH);
 
               this.circles.push({
-                x: posX,
-                y: posY,
+                x: posX, y: posY,
                 baseRadius: minR + Math.random() * (maxR - minR),
                 radius: 0,
                 color: `rgba(${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b}, ${alpha})`,
@@ -349,11 +314,11 @@
                 scaleSpeed: 0.01 + Math.random() * 0.02
               });
             }
-
             this.animate();
           }
 
           animate() {
+            if (!this.ctx || !this.canvas) return;
             const w = this.canvas.width;
             const h = this.canvas.height;
             
@@ -363,7 +328,6 @@
             this.circles.forEach(c => {
               c.x += c.vx;
               c.y += c.vy;
-
               if (c.x < -100 || c.x > w + 100) c.vx *= -1;
               if (c.y < -100 || c.y > h + 100) c.vy *= -1;
 
@@ -379,26 +343,23 @@
             requestAnimationFrame(() => this.animate());
           }
         }
-        customElements.define('ambient-circles', AmbientCircles);
+        if (!customElements.get('ambient-circles')) {
+          customElements.define('ambient-circles', AmbientCircles);
+        }
 
-        // Helper to format numbers
         function padZero(num) {
           return num < 10 ? '0' + num : num;
         }
 
-        // Progressive color calculation spanning the 3-hour window
         function getProgressiveColorStyle(diffMs) {
           const maxMs = 3 * 60 * 60 * 1000;
           let ratio = Math.max(0, Math.min(1, diffMs / maxMs));
-          
           const r = Math.round(234 + (34 - 234) * ratio);
           const g = Math.round(88 + (197 - 88) * ratio);
           const b = Math.round(12 + (94 - 12) * ratio);
-
           return `color: rgb(${r}, ${g}, ${b});`;
         }
 
-        // Check if card frame should pulse
         function isCardActive(s) {
           const now = new Date();
           const targetEnd = new Date(s.year, s.month, s.day, s.endHour, s.endMin, 0);
@@ -406,7 +367,6 @@
           return isToday && (targetEnd - now > 0);
         }
 
-        // Unified Status Tag & Dynamic Countdown with Safe Flex Layout
         function getSessionBadgeHTML(s) {
           const now = new Date();
           const targetStart = new Date(s.year, s.month, s.day, s.startHour, s.startMin, 0);
@@ -443,147 +403,138 @@
           }
         }
 
-        // Render Poster Content
         function renderSignage() {
-          lockScreenSize();
-          const data = signageData;
-          
-          const mainBg = document.getElementById('main-ambient');
-          if (mainBg && data.display) {
-            mainBg.init({ ...data.display, animationSpeed: 5.0 }, window.innerWidth, window.innerHeight, false);
-          }
+          try {
+            lockScreenSize();
+            const data = signageData;
+            
+            const mainBg = document.getElementById('main-ambient');
+            if (mainBg && data.display) {
+              mainBg.init({ ...data.display, animationSpeed: 5.0 }, window.innerWidth, window.innerHeight, false);
+            }
 
-          const appContainer = document.getElementById('poster-app');
-          const item = data.announcement;
+            const appContainer = document.getElementById('poster-app');
+            const item = data.announcement;
 
-          if (item && appContainer) {
-            let sessionsHTML = item.sessions.map((s, index) => {
-              const encodedQr = encodeURI(s.qrCode);
-              const qrContent = s.qrCode 
-                ? `<img src="${encodedQr}" alt="QR Code" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-slate-700 font-semibold text-center text-[1.2vh]\\'>Scan QR</span>';">` 
-                : `<span class="text-slate-800 font-normal text-xl">QR code Here</span>`;
+            if (item && appContainer) {
+              let sessionsHTML = item.sessions.map((s, index) => {
+                const encodedQr = s.qrCode ? encodeURI(s.qrCode) : '';
+                const qrContent = s.qrCode 
+                  ? `<img src="${encodedQr}" alt="QR" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-slate-700 font-semibold text-center text-[1.2vh]\\'>Scan QR</span>';">` 
+                  : `<span class="text-slate-800 font-normal text-xl">QR code</span>`;
 
-              const cardClass = isCardActive(s) ? "session-card today-card" : "session-card";
+                const cardClass = isCardActive(s) ? "session-card today-card" : "session-card";
 
-              return `
-                <div class="${cardClass}" id="session-card-${index}">
-                    <div class="session-card-bg">
-                        <ambient-circles class="card-ambient"></ambient-circles>
+                return `
+                  <div class="${cardClass}" id="session-card-${index}">
+                      <div class="session-card-bg">
+                          <ambient-circles class="card-ambient"></ambient-circles>
+                      </div>
+                      <div class="session-card-content flex flex-col justify-center pl-4 py-0.5">
+                          <div class="flex items-center space-x-3 mb-0.5">
+                              <h3 class="text-[2.3vh] font-extrabold text-slate-900 tracking-tight">
+                                  ${s.date}
+                              </h3>
+                              <span class="bg-brand-navy text-amber-400 font-extrabold text-[1.5vh] px-3 py-1 rounded-lg tracking-wide shadow-sm">
+                                  ${s.lang}
+                              </span>
+                          </div>
+                          <div id="badge-container-${s.id}">
+                              ${getSessionBadgeHTML(s)}
+                          </div>
+                          <p class="text-[1.7vh] text-slate-800 font-semibold mb-0.5 mt-0.5">
+                              ${s.time}
+                          </p>
+                          <p class="text-[1.7vh] text-slate-700 font-medium">
+                              ${s.location}
+                          </p>
+                      </div>
+
+                      <div class="session-card-content flex flex-col items-center space-y-1 pr-1">
+                          <div class="w-[9.5vh] h-[9.5vh] bg-white/95 rounded-xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
+                              ${qrContent}
+                          </div>
+                          <span class="text-slate-700 text-[1.3vh] font-normal">Registration link</span>
+                      </div>
+                  </div>
+                `;
+              }).join('');
+
+              const logoSectionHTML = data.display.logoUrl 
+                ? `<img src="${encodeURI(data.display.logoUrl)}" class="h-[6vh] w-auto object-contain" alt="Logo" onerror="this.onerror=null; this.outerHTML='<span class=\\'text-[2.5vh] font-extrabold brand-navy\\'>IOM</span>';">`
+                : `<span class="text-[2.5vh] font-extrabold brand-navy">IOM</span>`;
+
+              appContainer.innerHTML = `
+                <div class="w-full flex flex-col">
+                    <div class="w-full flex items-center justify-between mb-3">
+                        <div class="bg-brand-navy px-6 py-2.5 w-[55%] shadow-sm">
+                            <h1 class="text-white text-[1.6vh] font-bold tracking-wider uppercase font-sans">
+                                ${item.badge}
+                            </h1>
+                        </div>
+                        ${logoSectionHTML}
                     </div>
-                    <div class="session-card-content flex flex-col justify-center pl-4 py-0.5">
-                        <div class="flex items-center space-x-3 mb-0.5">
-                            <h3 class="text-[2.3vh] font-extrabold text-slate-900 tracking-tight">
-                                ${s.date}
-                            </h3>
-                            <span class="bg-brand-navy text-amber-400 font-extrabold text-[1.5vh] px-3 py-1 rounded-lg tracking-wide shadow-sm">
-                                ${s.lang}
-                            </span>
-                        </div>
-                        <div id="badge-container-${s.id}">
-                            ${getSessionBadgeHTML(s)}
-                        </div>
-                        <p class="text-[1.7vh] text-slate-800 font-semibold mb-0.5 mt-0.5">
-                            ${s.time}
-                        </p>
-                        <p class="text-[1.7vh] text-slate-700 font-medium">
-                            ${s.location}
-                        </p>
+
+                    <div class="mb-2">
+                        <h2 class="text-[2.4vh] font-semibold brand-navy tracking-tight mb-0.5">
+                            ${item.titleLine1}
+                        </h2>
+                        <h1 class="text-[3.2vh] font-black brand-navy tracking-tight">
+                            ${item.titleLine2}
+                        </h1>
                     </div>
 
-                    <div class="session-card-content flex flex-col items-center space-y-1 pr-1">
-                        <div class="w-[9.5vh] h-[9.5vh] bg-white/95 rounded-xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
-                            ${qrContent}
-                        </div>
-                        <span class="text-slate-700 text-[1.3vh] font-normal">Registration link</span>
+                    <div class="flex flex-col space-y-2">
+                        ${sessionsHTML}
                     </div>
                 </div>
+
+                <div class="pt-2">
+                    <p class="text-[4vh] font-black brand-navy leading-tight tracking-tight">
+                        ${item.footer}
+                    </p>
+                </div>
               `;
-            }).join('');
 
-            const logoSectionHTML = data.display.logoUrl 
-              ? `<img src="${encodeURI(data.display.logoUrl)}" class="h-[6vh] w-auto object-contain" alt="IOM Logo" onerror="this.onerror=null; this.outerHTML='<div class=\\'flex items-center space-x-2\\'><span class=\\'text-[2.5vh] font-extrabold brand-navy\\'>IOM</span></div>';">`
-              : `<div class="flex items-center space-x-4">
-                  <div class="flex items-center space-x-2">
-                      <div class="w-10 h-10 border-2 border-brand-navy rounded-full flex items-center justify-center p-1">
-                          <svg class="w-full h-full fill-current brand-navy" viewBox="0 0 24 24">
-                              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                          </svg>
-                      </div>
-                      <div class="flex flex-col leading-none">
-                          <span class="text-[2.5vh] font-extrabold brand-navy tracking-widest">IOM</span>
-                          <span class="text-[1vh] font-bold brand-navy tracking-wider mt-0.5">UN MIGRATION</span>
-                      </div>
-                  </div>
-                 </div>`;
-
-            appContainer.innerHTML = `
-              <div class="w-full flex flex-col">
-                  <div class="w-full flex items-center justify-between mb-3">
-                      <div class="bg-brand-navy px-6 py-2.5 w-[55%] shadow-sm">
-                          <h1 class="text-white text-[1.6vh] font-bold tracking-wider uppercase font-sans">
-                              ${item.badge}
-                          </h1>
-                      </div>
-                      ${logoSectionHTML}
-                  </div>
-
-                  <div class="mb-2">
-                      <h2 class="text-[2.4vh] font-semibold brand-navy tracking-tight mb-0.5">
-                          ${item.titleLine1}
-                      </h2>
-                      <h1 class="text-[3.2vh] font-black brand-navy tracking-tight">
-                          ${item.titleLine2}
-                      </h1>
-                  </div>
-
-                  <div class="flex flex-col space-y-2">
-                      ${sessionsHTML}
-                  </div>
-              </div>
-
-              <div class="pt-2">
-                  <p class="text-[4vh] font-black brand-navy leading-tight tracking-tight">
-                      ${item.footer}
-                  </p>
-              </div>
-            `;
-
-            setTimeout(() => {
-              document.querySelectorAll('.session-card').forEach((card) => {
-                const cardAmbient = card.querySelector('.card-ambient');
-                if (cardAmbient) {
-                  cardAmbient.init({
-                    circleCount: 54,
-                    animationSpeed: 5.0
-                  }, card.offsetWidth, card.offsetHeight, true);
-                }
-              });
-            }, 50);
-
-            // 1-second live ticker to update countdown and states cleanly
-            setInterval(() => {
-              signageData.announcement.sessions.forEach((s, idx) => {
-                const badgeEl = document.getElementById(`badge-container-${s.id}`);
-                if (badgeEl) {
-                  badgeEl.innerHTML = getSessionBadgeHTML(s);
-                }
-                const cardEl = document.getElementById(`session-card-${idx}`);
-                if (cardEl) {
-                  if (isCardActive(s)) {
-                    cardEl.classList.add("today-card");
-                  } else {
-                    cardEl.classList.remove("today-card");
+              setTimeout(() => {
+                document.querySelectorAll('.session-card').forEach((card) => {
+                  const cardAmbient = card.querySelector('.card-ambient');
+                  if (cardAmbient && typeof cardAmbient.init === 'function') {
+                    cardAmbient.init({
+                      circleCount: 54,
+                      animationSpeed: 5.0
+                    }, card.offsetWidth, card.offsetHeight, true);
                   }
-                }
-              });
-            }, 1000);
+                });
+              }, 50);
+            }
+          } catch (err) {
+            console.error("Render error caught safely:", err);
           }
         }
 
+        window.addEventListener('load', renderSignage);
+        window.addEventListener('resize', renderSignage);
         renderSignage();
-        window.addEventListener('resize', () => {
-          renderSignage();
-        });
+
+        setInterval(() => {
+          try {
+            signageData.announcement.sessions.forEach((s, idx) => {
+              const badgeEl = document.getElementById(`badge-container-${s.id}`);
+              if (badgeEl) {
+                badgeEl.innerHTML = getSessionBadgeHTML(s);
+              }
+              const cardEl = document.getElementById(`session-card-${idx}`);
+              if (cardEl) {
+                if (isCardActive(s)) {
+                  cardEl.classList.add("today-card");
+                } else {
+                  cardEl.classList.remove("today-card");
+                }
+              }
+            });
+          } catch (e) {}
+        }, 1000);
     </script>
 </body>
 </html>
