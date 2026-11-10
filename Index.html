@@ -172,26 +172,6 @@
             border-bottom-left-radius: 1.5vh;
             z-index: 3;
         }
-
-        /* Glassmorphism accent card for bottom footer callout */
-        .footer-banner {
-            background: linear-gradient(135deg, rgba(26, 59, 139, 0.95), rgba(15, 30, 80, 0.98));
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 1.5vh 3.5vh rgba(15, 23, 42, 0.25);
-            border-radius: 1.6vh;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .footer-banner::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 1.2vh;
-            height: 100%;
-            background: #f59e0b;
-        }
     </style>
 </head>
 <body>
@@ -548,16 +528,10 @@
                     </div>
                 </div>
 
-                <!-- Bold, interesting high-impact footer banner -->
-                <div class="w-full footer-banner p-3.5 pl-5 flex items-center justify-between">
-                    <p class="text-[2.6vh] font-black text-amber-400 tracking-tight leading-snug uppercase max-w-[85%] drop-shadow">
+                <div class="pt-1">
+                    <p class="text-[4.2vh] font-black brand-navy tracking-tight leading-tight uppercase">
                         ${item.footer}
                     </p>
-                    <div class="bg-amber-500 text-slate-900 rounded-full p-2.5 shadow-lg flex items-center justify-center shrink-0">
-                        <svg class="w-[3vh] h-[3vh] fill-current" viewBox="0 0 24 24">
-                            <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
-                        </svg>
-                    </div>
                 </div>
               `;
 
