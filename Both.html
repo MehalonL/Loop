@@ -87,11 +87,6 @@
       100% { transform: translateX(150%) skewX(-20deg); }
     }
 
-    @keyframes attentionPulse {
-      0% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 0 rgba(16, 185, 129, 0.4); }
-      50% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 1.2vh rgba(16, 185, 129, 0.2); }
-      100% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 0 rgba(16, 185, 129, 0); }
-    }
 
     @keyframes livePulse {
       0% { opacity: 1; transform: scale(1); }
@@ -156,7 +151,7 @@
     }
 
     .session-card.today-card {
-      border: 2px solid rgba(16, 185, 129, 0.8);
+      border: 2.5px solid rgba(26, 38, 107, 0.8);
       animation: attentionPulse 3s infinite ease-in-out;
     }
 
