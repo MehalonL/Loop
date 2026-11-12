@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <title>IOM Career Development Clinic & Timeline</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background: #0f172a;
+      font-family: 'Open Sans', 'Montserrat', sans-serif;
+      touch-action: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    
+    .display-viewport {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #dbe4f0;
+      touch-action: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5vh 2.5vw;
+    }
+
+    .bg-holder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .poster-content {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .brand-navy {
+      color: #1a3b8b;
+    }
+    .bg-brand-navy {
+      background-color: #1a3b8b;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-150%) skewX(-20deg); }
+      20% { transform: translateX(150%) skewX(-20deg); }
+      100% { transform: translateX(150%) skewX(-20deg); }
+    }
+
+    @keyframes attentionPulse {
+      0% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 0 rgba(16, 185, 129, 0.4); }
+      50% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 1.2vh rgba(16, 185, 129, 0.2); }
+      100% { box-shadow: 0 1vh 2.5vh rgba(0, 0, 0, 0.04), 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    @keyframes livePulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(1.04); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Slideshow Container for Session Cards */
+    .session-slideshow-wrapper {
+      position: relative;
+      width: 100%;
+      height: 11.5vh;
+      overflow: hidden;
+    }
+
+    .session-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(240, 245, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 1.2vh;
+      overflow: hidden;
+      box-shadow: 0 0.8vh 2vh rgba(0, 0, 0, 0.04);
+      padding: 0.8vh 1.5vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease-in-out;
+      transform: translateY(100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .session-card.active-slide {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 5;
+    }
+
+    .session-card.prev-slide {
+      transform: translateY(-100%);
+      opacity: 0;
+      z-index: 1;
+    }
+
+    .session-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      pointer-events: none;
+      animation: shimmer 6s infinite ease-in-out;
+      z-index: 4;
+    }
+
+    .session-card.today-card {
+      border: 2px solid rgba(16, 185, 129, 0.8);
+      animation: attentionPulse 3s infinite ease-in-out;
+    }
+
+    .badge-live-pulse {
+      animation: livePulse 1.5s infinite ease-in-out;
+    }
+
+    .session-card-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .session-card-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .session-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1vh;
+      background-color: #1a3b8b;
+      border-top-left-radius: 1.2vh;
+      border-bottom-left-radius: 1.2vh;
+      z-index: 3;
+    }
+
+    /* Timeline Section Styles */
+    .timeline-lower-section {
+      position: relative;
+      width: 100%;
+      flex-grow: 1;
+      margin-top: 1vh;
+      background: #000;
+      border-radius: 1.5vh;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .scroll-container {
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      touch-action: none;
+      pointer-events: none;
+    }
+    .scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+    .scroll-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+
+    .card {
+      width: 100%;
+      height: 55vh;
+      flex-shrink: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0 6% 12% 6%;
+      pointer-events: none;
+    }
+
+    .c1 { background-image: url('Img/1950s.jpg'); }
+    .c2 { background-image: url('Img/1960s.jpg'); }
+    .c3 { background-image: url('Img/1970s.jpg'); }
+    .c4 { background-image: url('Img/1980s.jpg'); }
+    .c5 { background-image: url('Img/1990s.jpg'); }
+    .c6 { background-image: url('Img/2000s.jpg'); }
+    .c7 { background-image: url('Img/2010s.jpg'); }
+    .c8 { background-image: url('Img/2020s.jpg'); }
+
+    .timeline-top-logo {
+      position: absolute;
+      top: 1.5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 5.5vh;
+      width: auto;
+      object-fit: contain;
+      z-index: 25;
+      pointer-events: none;
+    }
+
+    .meter-tape {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 28px;
+      border-right: 3px solid #ffc72c;
+      background-image: 
+        linear-gradient(to bottom, #ffc72c 3px, transparent 3px),
+        linear-gradient(to bottom, #ffc72c 2px, transparent 2px),
+        linear-gradient(to bottom, rgba(255, 199, 44, 0.8) 2px, transparent 2px);
+      background-size: 28px 100px, 20px 50px, 12px 10px;
+      background-repeat: repeat-y;
+      background-position: right top;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 0.95;
+      animation: smoothTapeScroll 4s linear infinite;
+    }
+
+    @keyframes smoothTapeScroll {
+      0% { background-position: right 100px; }
+      100% { background-position: right 0px; }
+    }
+
+    .decade-badge {
+      position: absolute;
+      left: 28px;
+      top: 28%;
+      transform: translateY(-90%) scale(1);
+      width: 90px;
+      height: 200px;
+      background-color: #ffc72c;
+      border: none;
+      border-radius: 0 65px 65px 0;
+      box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.45);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-left: 4px;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 45pt;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      writing-mode: vertical-rl;
+      z-index: 7;
+      transition: transform 0.4s ease-out, opacity 0.4s ease-out, top 0.4s ease-out;
+      transform-origin: left center;
+      pointer-events: none;
+    }
+
+    .decade-badge.peek-top {
+      top: 8%;
+      transform: translateY(0) scale(0.70);
+      opacity: 0.65;
+    }
+
+    .decade-badge.peek-bottom {
+      top: auto;
+      bottom: 8%;
+      transform: translateY(0) scale(0.70);
+      opacity: 0.65;
+    }
+    
+    .info-box {
+      width: 90%;
+      max-width: 1000px;
+      background: rgba(35, 35, 35, 0.85);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 2% 3%;
+      color: #ffffff;
+      z-index: 15;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+      margin: 0 auto;
+      height: auto;
+    }
+
+    .card.active-info .info-box {
+      opacity: 1;
+    }
+
+    .info-box p {
+      font-size: 1.15vh;
+      line-height: 1.35;
+      font-weight: 600;
+      color: #f0f0f0;
+      margin-bottom: 6px;
+    }
+
+    .info-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .wheel-overlay-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 15vh;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+      pointer-events: none;
+      z-index: 10;
+    }
+    .wheel-overlay-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 35vh;
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 70%, transparent 100%);
+      pointer-events: none;
+      z-index: 10;
+    }
+    .bottom-qr-container {
+      position: absolute;
+      bottom: 2vh;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      pointer-events: none;
+    }
+
+    .bottom-qr {
+      height: 7.5vh;
+      width: auto;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 6px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    }
+
+    .qr-link-text {
+      color: #ffb81c;
+      font-weight: 700;
+      font-size: 1.2vh;
+      letter-spacing: 0.8px;
+      text-decoration: none;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      padding: 3px 10px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="display-viewport" id="viewport">
+    <!-- Main Background Canvas -->
+    <div class="bg-holder">
+      <ambient-circles id="main-ambient"></ambient-circles>
+    </div>
+
+    <!-- App UI Layer -->
+    <div id="poster-app" class="poster-content">
+      <!-- Top Career Development Header & Session Slideshow Container -->
+      <div class="w-full flex flex-col items-start">
+        <div class="w-full flex items-center justify-start mb-1">
+          <div class="bg-brand-navy px-4 py-1.5 inline-block shadow-sm rounded-lg">
+            <h1 class="text-white text-[1.3vh] font-bold tracking-wider uppercase font-sans text-left">
+              CAREER DEVELOPMENT CLINIC
+            </h1>
+          </div>
+        </div>
+
+        <div class="mb-1 text-left w-full pl-2">
+          <h2 class="text-[1.6vh] font-semibold brand-navy tracking-tight mb-0.5">
+            Boost Your Applications:
+          </h2>
+          <h1 class="text-[2.2vh] font-black brand-navy tracking-tight">
+            CVs & Motivation Letters
+          </h1>
+        </div>
+
+        <!-- Slideshow Container -->
+        <div class="session-slideshow-wrapper" id="session-card-container">
+          <!-- Populated dynamically via script -->
+        </div>
+      </div>
+
+      <!-- Integrated 75th Anniversary Timeline Section -->
+      <div class="timeline-lower-section">
+        <div class="wheel-overlay-top"></div>
+        <img src="Img/IOM 75.png" alt="IOM 75 Logo" class="timeline-top-logo" onerror="this.onerror=null; this.style.display='none';">
+        <div class="wheel-overlay-bottom"></div>
+
+        <div class="bottom-qr-container">
+          <img src="Img/qr-code.png" alt="QR Code" class="bottom-qr" onerror="this.onerror=null; this.src='Docs/Tomorrow%20at%2011-00%20AM%20.png';">
+          <div class="qr-link-text">iom.int/iom-history</div>
+        </div>
+
+        <div class="scroll-container" id="scrollContainer">
+          <div class="scroll-content" id="scrollContent">
+            <div class="meter-tape"></div>
+
+            <!-- 1950s -->
+            <div class="card c1">
+              <div class="decade-badge">1950s</div>
+              <div class="info-box">
+                <p>The Organization was founded as the Provisional Intergovernmental Committee for the Movement of Migrants from Europe (PICMME) in 1951 as Europe struggled with vast post-war displacement. PICMME was established to help governments find safe destinations for people uprooted by conflict and seeking stability.</p>
+                <p>As needs increased, PICMME became the Intergovernmental Committee for European Migration (ICEM), expanding its capacity to manage movements through stronger coordination, registration and international cooperation. ICEM quickly came to play a central role in the opening of dignified pathways for those unable to return home.</p>
+              </div>
+            </div>
+
+            <!-- 1960s -->
+            <div class="card c2">
+              <div class="decade-badge">1960s</div>
+              <div class="info-box">
+                <p>The 1960s marked the consolidation of the Organization as a key actor in global mobility. By 1960, ICEM had directly assisted one million migrants, reflecting its expanding logistical capacity and central role in post-war movement management. Operating in a cold war environment, it continued to open safe routes and respond quickly to emerging displacement situations.</p>
+                <p>In the mid-1960s, ICEM launched early migration for development initiatives, helping to recruit or return skilled professionals to developing countries, particularly in Latin America. In 1968, it organized the resettlement of 40,000 Czechoslovak refugees, strengthening international trust in its ability to manage politically sensitive movements with discretion.</p>
+              </div>
+            </div>
+
+            <!-- 1970s -->
+            <div class="card c3">
+              <div class="decade-badge">1970s</div>
+              <div class="info-box">
+                <p>The 1970s saw ICEM take on rapidly expanding humanitarian responsibilities. It assisted Jewish refugees leaving the Soviet Union and managed growing resettlement movements across several regions as displacement increased around the world.</p>
+                <p>Throughout the decade, ICEM helped over 130,000 people in Bangladesh and Nepal reach safety, supported the evacuation of Asians from Uganda and made new beginnings possible for more than 31,000 Chileans fleeing persecution. By the middle of the decade, it had become a global forum on migration and had launched the Return of Talent programme. In 1975, it carried out one of its defining operations: large-scale assistance to Indo-Chinese refugees.</p>
+              </div>
+            </div>
+
+            <!-- 1980s -->
+            <div class="card c4">
+              <div class="decade-badge">1980s</div>
+              <div class="info-box">
+                <p>The 1980s marked a turning point as the Organization adopted a new name reflecting its broadened global mandate, becoming the Intergovernmental Committee for Migration (ICM). By this time, it had already assisted millions of migrants, and its scope continued to grow amid shifting geopolitical landscapes.</p>
+                <p>Further strengthening its dual focus on mobility and development, ICM expanded its migration for development programmes into Africa and later Asia, enabling skilled professionals to support developing economies. At the same time, it maintained large-scale humanitarian operations, including providing assistance to 1 million Indo-Chinese refugees between 1975 and 1986. The Organization's identity and reach continued to evolve, culminating, in 1989, with it officially becoming the International Organization for Migration (IOM). This transformation ushered in a new period for the Organization, defined by global mobility, expanding field operations, and a strengthened commitment to dignity and protection for people on the move.</p>
+              </div>
+            </div>
+
+            <!-- 1990s -->
+            <div class="card c5">
+              <div class="decade-badge">1990s</div>
+              <div class="info-box">
+                <p>The 1990s saw sudden geopolitical shifts after the fall of the Berlin Wall and German reunification, leaving many people searching for safety. IOM became a steady presence along those uncertain routes. Early in the decade, it supported the return of migrants stranded during the Gulf crisis, offering guidance as borders closed and options vanished. Across a transforming Europe, the Organization helped families from the Balkans displaced by conflict reunite and rebuild.</p>
+                <p>Later in the decade, IOM assisted returns to Mozambique and Rwanda, helping to heal communities scarred by conflict. When Hurricane Mitch devastated Central America in 1998, the Organization supported emergency efforts in Honduras. At the end of the decade, the evacuation of Kosovar families again highlighted IOM's role in helping people navigate profound upheaval with safety and dignity.</p>
+              </div>
+            </div>
+
+            <!-- 2000s -->
+            <div class="card c6">
+              <div class="decade-badge">2000s</div>
+              <div class="info-box">
+                <p>The early 2000s unfolded against a backdrop of tentative recovery, where people began moving back to places that had been reshaped by conflict. IOM supported large-scale returns to Timor-Leste, helping communities rebuild lives once uprooted by turmoil. Across regions emerging from war, the Organization assisted families stepping out of prolonged violence and transitioning into civilian life.</p>
+                <p>Climate impacts also redrew the boundaries of safety. When the Indian Ocean tsunami struck in 2004, devastating coastlines across several countries, IOM provided shelter, stability and an initial sense of grounding for survivors coping with sudden loss caused by the disaster. Throughout the decade, the Organization became a steady companion for communities navigating the long arc of recovery.</p>
+              </div>
+            </div>
+
+            <!-- 2010s -->
+            <div class="card c7">
+              <div class="decade-badge">2010s</div>
+              <div class="info-box">
+                <p>The 2010s brought overlapping crises that reshaped global mobility and expanded IOM's humanitarian role. The Organization responded to major displacement driven by conflicts in the Syrian Arab Republic, Iraq and the wider Middle East, assisting people uprooted by violence and shifting frontlines. The Arab Spring and its aftermath also generated new movement patterns, prompting evacuations, transit assistance and protection for migrants stranded as conditions rapidly changed.</p>
+                <p>Throughout the decade, mobility became both more visible and more vulnerable. IOM expanded cooperation with States, launched new tools to trace lives lost at sea, and supported families uprooted by conflicts in the Syrian Arab Republic and beyond, ensuring dignity in the face of uncertainty.</p>
+              </div>
+            </div>
+
+            <!-- 2020s -->
+            <div class="card c8">
+              <div class="decade-badge">2020s</div>
+              <div class="info-box">
+                <p>The 2020s opened to an unprecedented global stillness as the COVID-19 pandemic paused mobility while heightening the need for protection. IOM supported stranded migrants, monitored rapidly shifting mobility patterns and assisted communities facing sudden isolation and uncertainty. In these altered conditions, the Organization worked to keep essential pathways open for those most affected.</p>
+                <p>At the same time, climate impacts and prolonged crises strained regions already living with deep fragility. From Afghanistan and the Horn of Africa to Mexico and Central America, the Organization expanded life-saving assistance, strengthening health, shelter and protection systems that were being strained by cascading shocks. These years of disruption shone a light on the link between migration and resilience, and IOM remained alongside people adapting to a world in transformation.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* TOUCH & CONTEXT LOCK */
+    document.addEventListener('touchstart', function(e) { e.preventDefault(); }, { passive: false });
+    document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
+    document.addEventListener('touchend', function(e) { e.preventDefault(); }, { passive: false });
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+    /* DYNAMIC SCREEN LOCK */
+    function lockScreenSize() {
+      const viewport = document.getElementById('viewport');
+      if (viewport) {
+        const realHeight = window.innerHeight || document.documentElement.clientHeight;
+        viewport.style.height = realHeight + 'px';
+      }
+    }
+
+    window.addEventListener('resize', lockScreenSize);
+    window.addEventListener('load', lockScreenSize);
+    lockScreenSize();
+
+    // Multi-session data payload with CET to EAT conversion (+2 hours)
+    const signageData = {
+      "display": {
+        "backgroundColor": "#dbe4f0",
+        "circleCount": 48,
+        "animationSpeed": 5.0
+      },
+      "announcement": {
+        "sessions": [
+          {
+            "id": "s1",
+            "lang": "FR",
+            "year": 2026, "month": 10, "day": 12, // November 12, 2026
+            "startHour": 12, "startMin": 0,       // 12:00 CET -> 14:00 EAT
+            "endHour": 13, "endMin": 30,          // 13:30 CET -> 15:30 EAT
+            "qrCode": "Docs/Tomorrow at 11-00 AM .png"
+          },
+          {
+            "id": "s2",
+            "lang": "SP",
+            "year": 2026, "month": 10, "day": 12, // November 12, 2026
+            "startHour": 16, "startMin": 0,       // 16:00 CET -> 18:00 EAT
+            "endHour": 17, "endMin": 30,          // 17:30 CET -> 19:30 EAT
+            "qrCode": "Docs/Tomorrow at 11-00 AM .png"
+          }
+        ]
+      }
+    };
+
+    // Ambient Circles Web Component
+    class AmbientCircles extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+        this.shadowRoot.innerHTML = `
+          <style>
+            :host { display: block; width: 100%; height: 100%; background-color: var(--bg-color, transparent); }
+            canvas { width: 100%; height: 100%; display: block; }
+          </style>
+          <canvas id="circleCanvas"></canvas>
+        `;
+        this.canvas = this.shadowRoot.getElementById('circleCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.circles = [];
+        this.speedMultiplier = 5.0;
+      }
+
+      init(config, customWidth = window.innerWidth, customHeight = window.innerHeight, isCard = false) {
+        if (!this.canvas) return;
+        this.canvas.width = customWidth;
+        this.canvas.height = customHeight;
+
+        if (config.backgroundColor && !isCard) {
+          this.style.setProperty('--bg-color', config.backgroundColor);
+        } else {
+          this.style.setProperty('--bg-color', 'transparent');
+        }
+        this.speedMultiplier = config.animationSpeed || 5.0;
+
+        const baseColors = isCard 
+          ? [{ r: 180, g: 205, b: 245 }, { r: 210, g: 228, b: 255 }]
+          : [{ r: 160, g: 190, b: 240 }, { r: 190, g: 215, b: 250 }];
+
+        const count = config.circleCount || (isCard ? 54 : 48);
+        this.circles = [];
+
+        const cols = isCard ? 9 : 6;
+        const rows = Math.ceil(count / cols);
+        const cellW = customWidth / cols;
+        const cellH = customHeight / rows;
+
+        for (let i = 0; i < count; i++) {
+          const selectedColor = baseColors[i % baseColors.length];
+          const alpha = isCard ? (0.03 + Math.random() * 0.06).toFixed(2) : (0.06 + Math.random() * 0.12).toFixed(2);
+          const minR = isCard ? 15 : (customWidth / 8);
+          const maxR = isCard ? 50 : (customWidth / 4);
+
+          const row = Math.floor(i / cols);
+          const col = i % cols;
+          const posX = (col * cellW) + (Math.random() * cellW);
+          const posY = (row * cellH) + (Math.random() * cellH);
+
+          this.circles.push({
+            x: posX, y: posY,
+            baseRadius: minR + Math.random() * (maxR - minR),
+            radius: 0,
+            color: `rgba(${selectedColor.r}, ${selectedColor.g}, ${selectedColor.b}, ${alpha})`,
+            vx: (Math.random() - 0.5) * this.speedMultiplier,
+            vy: (Math.random() - 0.5) * this.speedMultiplier,
+            scaleAngle: Math.random() * Math.PI * 2,
+            scaleSpeed: 0.01 + Math.random() * 0.02
+          });
+        }
+        this.animate();
+      }
+
+      animate() {
+        if (!this.ctx || !this.canvas) return;
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        
+        this.ctx.clearRect(0, 0, w, h);
+        this.ctx.globalCompositeOperation = 'multiply';
+
+        this.circles.forEach(c => {
+          c.x += c.vx;
+          c.y += c.vy;
+          if (c.x < -100 || c.x > w + 100) c.vx *= -1;
+          if (c.y < -100 || c.y > h + 100) c.vy *= -1;
+
+          c.scaleAngle += c.scaleSpeed;
+          c.radius = c.baseRadius * (0.8 + Math.sin(c.scaleAngle) * 0.2);
+
+          this.ctx.beginPath();
+          this.ctx.fillStyle = c.color;
+          this.ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+          this.ctx.fill();
+        });
+
+        requestAnimationFrame(() => this.animate());
+      }
+    }
+    if (!customElements.get('ambient-circles')) {
+      customElements.define('ambient-circles', AmbientCircles);
+    }
+
+    function padZero(num) {
+      return num < 10 ? '0' + num : num;
+    }
+
+    // Format date with day of the week (e.g. "Thursday, 12 November")
+    function getFormattedDateString(year, month, day) {
+      const dateObj = new Date(year, month, day);
+      const options = { weekday: 'long', day: 'numeric', month: 'long' };
+      return dateObj.toLocaleDateString('en-US', options);
+    }
+
+    // Format hour/minute into 12-hour AM/PM string
+    function format12Hour(hour, min) {
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+      return `${formattedHour}:${padZero(min)} ${ampm}`;
+    }
+
+    // Convert CET hours/mins to Addis Ababa local time (EAT, UTC+3; CET is UTC+1)
+    function formatTimeRangeEAT(startHour, startMin, endHour, endMin) {
+      let startEATHour = startHour + 2;
+      let endEATHour = endHour + 2;
+      if (startEATHour >= 24) startEATHour -= 24;
+      if (endEATHour >= 24) endEATHour -= 24;
+
+      const startTimeStr = format12Hour(startEATHour, startMin);
+      const endTimeStr = format12Hour(endEATHour, endMin);
+
+      return `${startTimeStr} - ${endTimeStr}`;
+    }
+
+    function getNextTodaySessionIndex() {
+      const now = new Date();
+      const sessions = signageData.announcement.sessions;
+      for (let i = 0; i < sessions.length; i++) {
+        const s = sessions[i];
+        const isToday = (now.getDate() === s.day && now.getMonth() === s.month && now.getFullYear() === s.year);
+        const targetEnd = new Date(s.year, s.month, s.day, s.endHour + 2, s.endMin, 0);
+        if (isToday && (targetEnd - now) > 0) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    function isCardActive(s, index) {
+      const now = new Date();
+      const targetEnd = new Date(s.year, s.month, s.day, s.endHour + 2, s.endMin, 0);
+      const isToday = (now.getDate() === s.day && now.getMonth() === s.month && now.getFullYear() === s.year);
+      return isToday && ((targetEnd - now) > 0) && (index === getNextTodaySessionIndex());
+    }
+
+    function getSessionBadgeHTML(s, index) {
+      const now = new Date();
+      const targetStart = new Date(s.year, s.month, s.day, s.startHour + 2, s.startMin, 0);
+      const targetEnd = new Date(s.year, s.month, s.day, s.endHour + 2, s.endMin, 0);
+
+      const diffStart = targetStart - now;
+      const diffEnd = targetEnd - now;
+      const isToday = (now.getDate() === s.day && now.getMonth() === s.month && now.getFullYear() === s.year);
+
+      const fourHoursInMs = 4 * 60 * 60 * 1000;
+
+      if (diffStart <= 0 && diffEnd > 0) {
+        return `<span class="badge-live-pulse bg-orange-500 text-white font-black text-[1vh] px-1.5 py-0.5 rounded uppercase tracking-wider shadow-md inline-block my-0.2">● LIVE NOW</span>`;
+      } else if (diffEnd <= 0 && isToday) {
+        return `<span class="bg-slate-600 text-slate-300 font-semibold text-[1vh] px-1.5 py-0.5 rounded uppercase tracking-wider inline-block my-0.2">Ended</span>`;
+      } else if (diffStart > 0 && diffStart <= fourHoursInMs) {
+        const hrs = Math.floor(diffStart / (1000 * 60 * 60));
+        const mins = Math.floor((diffStart % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diffStart % (1000 * 60)) / 1000);
+
+        return `<div class="flex items-center space-x-1.5 my-0.2">
+          <span class="bg-emerald-600 text-white font-extrabold text-[0.9vh] px-1 py-0.5 rounded uppercase tracking-wider shadow-sm shrink-0">Next Session</span>
+          <span class="text-orange-500 font-extrabold text-[1vh] tracking-wide whitespace-nowrap">Starts in ${padZero(hrs)}h ${padZero(mins)}m ${padZero(secs)}s</span>
+        </div>`;
+      } else {
+        if (isToday) {
+          return `<span class="bg-emerald-600 text-white font-extrabold text-[1vh] px-1.5 py-0.5 rounded uppercase tracking-wider shadow-sm inline-block my-0.2">Next Session</span>`;
+        } else {
+          return `<span class="bg-slate-500 text-white font-bold text-[1vh] px-1.5 py-0.5 rounded uppercase tracking-wider shadow-sm inline-block my-0.2">Upcoming</span>`;
+        }
+      }
+    }
+
+    let currentSlideIndex = 0;
+    let slideInterval = null;
+
+    // Render Poster Content & Initialize Timelines
+    function renderSignage() {
+      try {
+        lockScreenSize();
+        const data = signageData;
+        
+        const mainBg = document.getElementById('main-ambient');
+        if (mainBg && data.display) {
+          mainBg.init({ ...data.display, animationSpeed: 5.0 }, window.innerWidth, window.innerHeight, false);
+        }
+
+        const cardContainer = document.getElementById('session-card-container');
+        const item = data.announcement;
+
+        if (item && cardContainer) {
+          cardContainer.innerHTML = item.sessions.map((s, index) => {
+            const encodedQr = s.qrCode ? encodeURI(s.qrCode) : '';
+            const qrContent = s.qrCode 
+              ? `<img src="${encodedQr}" alt="QR Code" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-slate-700 font-semibold text-center text-[1vh]\\'>Scan QR</span>';">` 
+              : `<span class="text-slate-800 font-normal text-xl">QR code Here</span>`;
+
+            const cardClass = isCardActive(s, index) ? "session-card today-card" : "session-card";
+            const initialActive = index === 0 ? "active-slide" : "";
+            const formattedDate = getFormattedDateString(s.year, s.month, s.day);
+            const timeRangeStr = formatTimeRangeEAT(s.startHour, s.startMin, s.endHour, s.endMin);
+
+            return `
+              <div class="${cardClass} ${initialActive}" id="session-card-${index}">
+                  <div class="session-card-bg">
+                      <ambient-circles class="card-ambient"></ambient-circles>
+                  </div>
+                  <div class="session-card-content flex flex-col justify-center pl-2.5">
+                      <div class="flex items-center space-x-2 mb-0.5">
+                          <h3 class="text-[1.6vh] font-extrabold text-slate-900 tracking-tight">
+                              ${formattedDate}
+                          </h3>
+                          <span class="bg-brand-navy text-amber-400 font-extrabold text-[1.1vh] px-2 py-0.2 rounded-lg tracking-wide shadow-sm">
+                              ${s.lang}
+                          </span>
+                      </div>
+                      <div id="badge-container-${s.id}">
+                          ${getSessionBadgeHTML(s, index)}
+                      </div>
+                      <p class="text-[1.3vh] text-slate-800 font-semibold mb-0.2 mt-0.2">
+                          ${timeRangeStr}
+                      </p>
+                      <p class="text-[1.1vh] text-slate-700 font-medium">
+                          Addis Ababa Time (EAT)
+                      </p>
+                  </div>
+
+                  <div class="session-card-content flex flex-col items-center space-y-0.5 pr-1">
+                      <div class="w-[7vh] h-[7vh] bg-white/95 rounded-xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
+                          ${qrContent}
+                      </div>
+                      <span class="text-slate-700 text-[1vh] font-normal">Registration link</span>
+                  </div>
+              </div>
+            `;
+          }).join('');
+
+          setTimeout(() => {
+            document.querySelectorAll('.session-card').forEach((card) => {
+              const cardAmbient = card.querySelector('.card-ambient');
+              if (cardAmbient && typeof cardAmbient.init === 'function') {
+                cardAmbient.init({
+                  circleCount: 54,
+                  animationSpeed: 5.0
+                }, card.offsetWidth, card.offsetHeight, true);
+              }
+            });
+          }, 50);
+
+          // Start Slideshow rotation every 12 seconds if multiple sessions exist
+          if (item.sessions.length > 1 && !slideInterval) {
+            slideInterval = setInterval(rotateSlides, 12000);
+          }
+        }
+      } catch (err) {
+        console.error("Render error caught safely:", err);
+      }
+    }
+
+    // Bottom-to-Top Slide Motion Handler
+    function rotateSlides() {
+      const sessions = signageData.announcement.sessions;
+      const cards = document.querySelectorAll('.session-card');
+      if (cards.length <= 1) return;
+
+      const prevIndex = currentSlideIndex;
+      currentSlideIndex = (currentSlideIndex + 1) % sessions.length;
+
+      cards[prevIndex].classList.remove('active-slide');
+      cards[prevIndex].classList.add('prev-slide');
+
+      cards[currentSlideIndex].classList.remove('prev-slide');
+      cards[currentSlideIndex].classList.add('active-slide');
+
+      setTimeout(() => {
+        cards.forEach((card, idx) => {
+          if (idx !== currentSlideIndex) {
+            card.classList.remove('prev-slide');
+          }
+        });
+      }, 800);
+    }
+
+    window.addEventListener('load', renderSignage);
+    window.addEventListener('resize', renderSignage);
+    renderSignage();
+
+    // Real-time state ticker for countdowns
+    setInterval(() => {
+      try {
+        signageData.announcement.sessions.forEach((s, idx) => {
+          const badgeEl = document.getElementById(`badge-container-${s.id}`);
+          if (badgeEl) {
+            badgeEl.innerHTML = getSessionBadgeHTML(s, idx);
+          }
+          const cardEl = document.getElementById(`session-card-${idx}`);
+          if (cardEl) {
+            if (isCardActive(s, idx)) {
+              cardEl.classList.add("today-card");
+            } else {
+              cardEl.classList.remove("today-card");
+            }
+          }
+        });
+      } catch (e) {}
+    }, 1000);
+
+    // Timeline Automatic Infinite Scroll Logic
+    const container = document.getElementById('scrollContainer');
+    const content = document.getElementById('scrollContent');
+
+    const originalCards = Array.from(content.querySelectorAll('.card'));
+    for (let set = 0; set < 2; set++) {
+      originalCards.forEach(card => {
+        content.appendChild(card.cloneNode(true));
+      });
+    }
+
+    const cards = Array.from(document.querySelectorAll('.card'));
+    const totalPauseDuration = 20000;
+    const fadeDelay = 3000;
+    const scrollDuration = 1000;
+    let isMoving = false;
+    let fadeTimer = null;
+
+    function getDimensions() {
+      const cardHeight = cards[0].getBoundingClientRect().height;
+      const viewportHeight = container.clientHeight;
+      const centerOffset = (viewportHeight - cardHeight) / 2;
+      const singleSetHeight = cardHeight * 8;
+      return { cardHeight, viewportHeight, centerOffset, singleSetHeight };
+    }
+
+    function updateScaleMotion(activateInfoNow = false) {
+      const { cardHeight, centerOffset } = getDimensions();
+      const currentScroll = container.scrollTop;
+      const centerIndex = Math.round((currentScroll + centerOffset) / cardHeight);
+
+      cards.forEach((card, index) => {
+        const badge = card.querySelector('.decade-badge');
+        badge.classList.remove('peek-top', 'peek-bottom');
+        badge.style.top = '';
+
+        if (index === centerIndex) {
+          badge.style.top = '28%';
+          badge.style.transform = 'translateY(-50%) scale(1)';
+          badge.style.opacity = '1.0';
+          
+          if (activateInfoNow) {
+            card.classList.add('active-info');
+          } else {
+            card.classList.remove('active-info');
+          }
+        } else {
+          card.classList.remove('active-info');
+
+          if (index === centerIndex - 1) {
+            badge.classList.add('peek-top');
+            badge.style.transform = 'scale(0.70)';
+            badge.style.opacity = '0.65';
+          } else if (index === centerIndex + 1) {
+            badge.classList.add('peek-bottom');
+            badge.style.transform = 'scale(0.70)';
+            badge.style.opacity = '0.65';
+          } else {
+            badge.style.top = '28%';
+            badge.style.transform = 'translateY(-50%) scale(0.5)';
+            badge.style.opacity = '0.3';
+          }
+        }
+      });
+    }
+
+    function resetToCenter() {
+      const { centerOffset, singleSetHeight } = getDimensions();
+      container.scrollTop = singleSetHeight - centerOffset;
+      updateScaleMotion(false);
+    }
+
+    window.addEventListener('resize', resetToCenter);
+    
+    container.addEventListener('scroll', () => {
+      if (!isMoving) {
+        updateScaleMotion(false);
+      }
+    });
+
+    resetToCenter();
+
+    function stepScroll() {
+      if (isMoving) return;
+      isMoving = true;
+
+      if (fadeTimer) clearTimeout(fadeTimer);
+      updateScaleMotion(false);
+
+      const { cardHeight, centerOffset, singleSetHeight } = getDimensions();
+      const startScrollTop = container.scrollTop;
+      const startTime = performance.now();
+
+      function animateScroll(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / scrollDuration, 1);
+        
+        const easeProgress = progress < 0.5 
+          ? 4 * progress * progress * progress 
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+        container.scrollTop = startScrollTop + (cardHeight * easeProgress);
+        updateScaleMotion(false);
+
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          if (container.scrollTop >= (singleSetHeight * 2) - centerOffset) {
+            container.scrollTop -= singleSetHeight;
+          }
+          
+          updateScaleMotion(false);
+
+          fadeTimer = setTimeout(() => {
+            updateScaleMotion(true);
+          }, fadeDelay);
+
+          setTimeout(() => {
+            isMoving = false;
+            stepScroll();
+          }, totalPauseDuration);
+        }
+      }
+
+      requestAnimationFrame(animateScroll);
+    }
+
+    fadeTimer = setTimeout(() => {
+      updateScaleMotion(true);
+    }, fadeDelay);
+
+    setTimeout(() => {
+      stepScroll();
+    }, totalPauseDuration);
+  </script>
+</body>
+</html>
