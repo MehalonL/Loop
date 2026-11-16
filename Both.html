@@ -38,7 +38,23 @@
       right: 0;
       bottom: 0;
     }
-    
+    .subtitle {
+      font-size: 2.8vh;
+      font-weight: 800;
+      color: #1a3b8b;
+      margin-top: 0.2vh;
+      margin-bottom: 0vh;
+      line-height: 0.9;
+    }    
+
+    .Body {
+      font-size: 1.5vh;
+      font-weight: 600;
+      color: #1a3b8b;
+      margin-top: 0.4vh;
+      margin-bottom: 0.8vh;
+      line-height: 1.2;
+    }
     .display-viewport {
       position: absolute;
       top: 0;
@@ -103,6 +119,7 @@
       width: 100%;
       height: 11.5vh;
       overflow: hidden;
+      margin: 0;
     }
 
     .session-card {
@@ -116,7 +133,7 @@
       border-radius: 1.2vh;
       overflow: hidden;
       box-shadow: 0 0.8vh 2vh rgba(0, 0, 0, 0.05);
-      padding: 0.8vh 1.5vw;
+      padding: 0.6vh 1.5vw;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -419,20 +436,20 @@
       <!-- Top Career Development Header & Session Slideshow Container -->
       <div class="w-full flex flex-col items-start">
         <div class="w-full flex items-center justify-start mb-1">
-          <div class="bg-brand-navy px-4 py-1.5 inline-block shadow-sm rounded-lg">
+          <div class="bg-brand-navy px-4 py-1.5 rounded-md">
             <h1 class="text-white text-[1.3vh] font-bold tracking-wider uppercase font-sans text-left">
-              CAREER DEVELOPMENT CLINIC
+              CAREER DEVELOPMENT CLINIC 
             </h1>
           </div>
         </div>
 
-        <div class="mb-1 text-left w-full pl-2">
-          <h2 class="text-[1.6vh] font-semibold brand-navy tracking-tight mb-0.5">
-            Boost Your Applications:
-          </h2>
-          <h1 class="text-[2.2vh] font-black brand-navy tracking-tight">
-            CVs & Motivation Letters
+        <div>
+          <h1 class="subtitle">
+            Interviewing Skills and CV Labs
           </h1>
+          <h2 class="Body">
+            Prepare with Confidence & Refine your candidate profile, including your CV and motivation letter, to ensure clarity, relevance, and impact.
+          </h2>  
         </div>
 
         <!-- Slideshow Container -->
@@ -448,7 +465,7 @@
         <div class="wheel-overlay-bottom"></div>
 
         <div class="bottom-qr-container">
-          <img src="Img/qr-code.png" alt="QR Code" class="bottom-qr" onerror="this.onerror=null; this.src='Docs/Tomorrow%20at%2011-00%20AM%20.png';">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https%3A%2F%2Fwww.iom.int%2Fiom-history" alt="QR Code" class="bottom-qr">
           <div class="qr-link-text">iom.int/iom-history</div>
         </div>
 
@@ -554,7 +571,7 @@
     window.addEventListener('load', lockScreenSize);
     lockScreenSize();
 
-    // Multi-session data payload with CET to EAT conversion (+2 hours)
+    // Session data payload
     const signageData = {
       "display": {
         "backgroundColor": "#dbe4f0",
@@ -565,19 +582,35 @@
         "sessions": [
           {
             "id": "s1",
-            "lang": "FR",
-            "year": 2026, "month": 10, "day": 12, // November 12, 2026
-            "startHour": 12, "startMin": 0,       // 12:00 CET -> 14:00 EAT
-            "endHour": 13, "endMin": 30,          // 13:30 CET -> 15:30 EAT
-            "qrCode": "Docs/Tomorrow at 11-00 AM .png"
+            "lang": "EN",
+            "year": 2026, "month": 10, "day": 16, // November 16, 2026
+            "startHour": 9, "startMin": 0,        // 09:00 CET -> 11:00 EAT
+            "endHour": 10, "endMin": 30,          // 10:30 CET -> 12:30 EAT
+            "bookingLink": "https://events.teams.microsoft.com/event/9129444f-fd62-464e-b624-02cebb5ee03b@1588262d-23fb-43b4-bd6e-bce49c8e6186"
           },
           {
             "id": "s2",
+            "lang": "FR",
+            "year": 2026, "month": 10, "day": 17, // November 17, 2026
+            "startHour": 12, "startMin": 0,       // 12:00 CET -> 14:00 EAT
+            "endHour": 13, "endMin": 30,          // 13:30 CET -> 15:30 EAT
+            "bookingLink": "https://events.teams.microsoft.com/event/a0d17f78-341e-4d16-b2e9-2584bdd5d060@1588262d-23fb-43b4-bd6e-bce49c8e6186"
+          },
+          {
+            "id": "s3",
             "lang": "SP",
-            "year": 2026, "month": 10, "day": 12, // November 12, 2026
+            "year": 2026, "month": 10, "day": 17, // November 17, 2026
             "startHour": 16, "startMin": 0,       // 16:00 CET -> 18:00 EAT
             "endHour": 17, "endMin": 30,          // 17:30 CET -> 19:30 EAT
-            "qrCode": "Docs/Tomorrow at 11-00 AM .png"
+            "bookingLink": "https://events.teams.microsoft.com/event/0e9ddf79-a6d3-42e7-ac0a-e6e88382d1f3@1588262d-23fb-43b4-bd6e-bce49c8e6186"
+          },
+          {
+            "id": "s4",
+            "lang": "EN",
+            "year": 2026, "month": 10, "day": 19, // November 19, 2026
+            "startHour": 16, "startMin": 0,       // 16:00 CET -> 18:00 EAT
+            "endHour": 17, "endMin": 30,          // 17:30 CET -> 19:30 EAT
+            "bookingLink": "https://events.teams.microsoft.com/event/1be5105c-bc8c-48cb-bcff-53526dae66ed@1588262d-23fb-43b4-bd6e-bce49c8e6186"
           }
         ]
       }
@@ -685,6 +718,17 @@
 
     function getFormattedDateString(year, month, day) {
       const dateObj = new Date(year, month, day);
+      const now = new Date();
+      
+      // Check if session date is today
+      const isToday = dateObj.getFullYear() === now.getFullYear() &&
+                      dateObj.getMonth() === now.getMonth() &&
+                      dateObj.getDate() === now.getDate();
+
+      if (isToday) {
+        return 'TODAY';
+      }
+
       const options = { weekday: 'long', day: 'numeric', month: 'long' };
       return dateObj.toLocaleDateString('en-US', options);
     }
@@ -788,9 +832,11 @@
 
         if (item && cardContainer) {
           cardContainer.innerHTML = item.sessions.map((s, index) => {
-            const encodedQr = s.qrCode ? encodeURI(s.qrCode) : '';
-            const qrContent = s.qrCode 
-              ? `<img src="${encodedQr}" alt="QR Code" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-slate-700 font-semibold text-center text-[1vh]\\'>Scan QR</span>';">` 
+            const qrUrl = s.bookingLink 
+              ? `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(s.bookingLink)}` 
+              : '';
+            const qrContent = qrUrl 
+              ? `<img src="${qrUrl}" alt="Booking QR Code" class="w-full h-full object-contain p-0.5" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\\'text-slate-700 font-semibold text-center text-[1vh]\\'>Scan QR</span>';">` 
               : `<span class="text-slate-800 font-normal text-xl">QR code Here</span>`;
 
             const cardClass = isCardActive(s) ? "session-card today-card" : "session-card";
@@ -800,31 +846,31 @@
 
             return `
               <div class="${cardClass} ${initialActive}" id="session-card-${index}">
-                  <div class="session-card-content flex flex-col justify-center pl-2.5">
+                  <div class="session-card-content flex flex-col justify-center pl-2.5 flex-grow">
                       <div class="flex items-center space-x-2 mb-0.5">
-                          <h3 class="text-[1.6vh] font-extrabold text-slate-900 tracking-tight">
+                          <h3 id="date-label-${s.id}" class="text-[2.5vh] font-extrabold text-slate-900 tracking-tight whitespace-nowrap">
                               ${formattedDate}
                           </h3>
-                          <span class="bg-brand-navy text-amber-400 font-extrabold text-[1.1vh] px-2 py-0.2 rounded-lg tracking-wide shadow-sm">
+                          <span class="bg-brand-navy text-amber-400 font-extrabold text-[1.1vh] px-2 py-0.2 rounded-lg tracking-wide shadow-sm shrink-0">
                               ${s.lang}
                           </span>
                       </div>
                       <div id="badge-container-${s.id}">
                           ${getSessionBadgeHTML(s)}
                       </div>
-                      <p class="text-[1.3vh] text-slate-800 font-semibold mb-0.2 mt-0.2">
+                      <p class="text-[1.2vh] text-slate-800 font-semibold mb-0.2 mt-0.2">
                           ${timeRangeStr}
                       </p>
-                      <p class="text-[1.1vh] text-slate-700 font-medium">
+                      <p class="text-[1.0vh] text-slate-700 font-medium">
                           Addis Ababa Time (EAT)
                       </p>
                   </div>
 
-                  <div class="session-card-content flex flex-col items-center space-y-0.5 pr-1">
-                      <div class="w-[7vh] h-[7vh] bg-white/95 rounded-xl flex items-center justify-center text-slate-800 shadow-sm border border-slate-300 overflow-hidden">
+                  <div class="session-card-content flex flex-col items-center space-y-0.5 pr-1 shrink-0">
+                      <div class="w-[8vh] h-[8vh] bg-white rounded-xl flex items-center justify-center text-slate-800 shadow-md border-2 border-slate-300 overflow-hidden">
                           ${qrContent}
                       </div>
-                      <span class="text-slate-700 text-[1vh] font-normal">Registration link</span>
+                      <span class="text-brand-navy font-bold text-[1vh] tracking-wide whitespace-nowrap">Booking Link</span>
                   </div>
               </div>
             `;
@@ -866,10 +912,14 @@
     window.addEventListener('resize', renderSignage);
     renderSignage();
 
-    // Real-time state ticker for countdowns
+    // Real-time state ticker for countdowns and midnight date rollovers
     setInterval(() => {
       try {
         signageData.announcement.sessions.forEach((s, idx) => {
+          const dateEl = document.getElementById(`date-label-${s.id}`);
+          if (dateEl) {
+            dateEl.textContent = getFormattedDateString(s.year, s.month, s.day);
+          }
           const badgeEl = document.getElementById(`badge-container-${s.id}`);
           if (badgeEl) {
             badgeEl.innerHTML = getSessionBadgeHTML(s);
@@ -923,7 +973,7 @@
         badge.style.top = '';
 
         if (index === centerIndex) {
-          badge.style.top = '10%';
+          badge.style.top = '1%';
           badge.style.transform = 'translateY(-50%) scale(1)';
           badge.style.opacity = '1.0';
           
@@ -944,7 +994,7 @@
             badge.style.transform = 'scale(0.70)';
             badge.style.opacity = '0.65';
           } else {
-            badge.style.top = '10%';
+            badge.style.top = '1%';
             badge.style.transform = 'translateY(-50%) scale(0.5)';
             badge.style.opacity = '0.3';
           }
