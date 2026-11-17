@@ -294,31 +294,19 @@
     }
 
     .decade-badge {
-      position: absolute;
-      left: 28px;
-      top: 1%;
-      transform: translateY(-50%) scale(1);
-      width: 90px;
-      height: 200px;
-      background-color: #ffc72c;
-      border: none;
-      border-radius: 0 65px 65px 0;
-      box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.45);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-left: 4px;
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 45pt;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      writing-mode: vertical-rl;
-      z-index: 7;
-      transition: transform 0.4s ease-out, opacity 0.4s ease-out, top 0.4s ease-out;
-      transform-origin: left center;
-      pointer-events: none;
-      will-change: transform, opacity;
-    }
+  position: absolute;
+  left: 28px;
+  top: 1%;
+  transform: translateY(-50%) scale(1);
+  width: 90px;          /* Horizontal thickness of the yellow tab */
+  height: 200px;        /* Vertical length of the yellow tab */
+  background-color: #ffc72c;
+  border: none;
+  border-radius: 0 65px 65px 0; /* Keep at least half of width/height for a smooth pill curve */
+  /* ... */
+  font-size: 45pt;      /* Size of the "1950s" text */
+  /* ... */
+}
 
     .decade-badge.peek-top {
       top: 1%;
